@@ -26,70 +26,126 @@
         justify-content: center;
         align-items: center;
       }
+      .swiper-pagination2 .swiper-pagination-bullet-active {
+        background-color: white !important;
+      }
       .swiper-pagination-bullet-active {
         background-color: white !important;
       }
     </style>
   </head>
-  <body class="font-DM text-text">
-    <section class="w-full h-fit relative">
-      <div class="relative h-screen">
-        <img
-          class="w-full h-full object-cover"
-          src="./assets/hero.png"
-          alt=""
-        />
-        <div class="h-full w-full absolute bg-[#5338ca7a] top-0 left-0"></div>
-      </div>
+  <body class="font-DM text-text relative">
+    <div
+      id="hamburger-menu"
+      class="hidden absolute top-0 right-0 h-screen w-full bg-white z-10"
+    ></div>
+    <section class="w-full h-screen" id="home">
       <div
-        class="absolute top-[85px] text-text flex w-full justify-end sm:justify-center"
+        class="h-screen"
+        style="
+          background-image: url('./assets/hero.png');
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-color: #5338ca7a;
+        "
       >
-        <ul class="flex items-end sm:hidden font-medium mr-2">
-          <li>&#9776;</li>
-        </ul>
-        <ul class="hidden sm:flex sm:gap-[44px] sm:items-center font-medium">
-          <li>Home</li>
-          <li>Features</li>
-          <li>Pricing</li>
-          <li>Blog</li>
-          <li>Contact</li>
-          <li>About</li>
-        </ul>
-      </div>
-      <div
-        class="absolute top-[120px] sm:top-[253px] h-[500px] sm:h-[300px] w-full"
-      >
-        <div class="swiper mySwiper w-full h-full">
-          <div class="swiper-wrapper">
-            <div
-              class="swiper-slide text-center flex items-center justify-center"
-            >
-              <div class="w-[300px] sm:w-[306px] md:w-[736px] self-center">
-                <h3 class="text-[20px] xl:text-[24px] font-bold">Startup 3</h3>
-                <h1 class="text-[35px] xl:text-[72px] font-bold">
-                  Forget About Code
-                </h1>
-                <p class="text-[20px] xl:text-[22px] font-medium">
-                  Startup Framework gives you complete freedom over your
-                  creative process — you don’t have to think about any technical
-                  aspects. There are no limits and absolutely no coding.
-                </p>
+        <div
+          class="pt-2 sm:pt-[85px] text-text flex w-full justify-end sm:justify-center sm:mb-[142px]"
+        >
+          <ul class="flex items-end sm:hidden font-medium mr-2">
+            <li id="hamburger-menu-icon">&#9776;</li>
+          </ul>
+          <ul
+            class="hidden sm:flex sm:gap-[44px] justify-start sm:items-center font-medium"
+          >
+            <li class="cursor-pointer text-slate-300"><a href="#">Home</a></li>
+            <li class="cursor-pointer"><a href="#features">Features</a></li>
+            <li class="cursor-pointer"><a href="#plan-pricing">Pricing</a></li>
+            <li class="cursor-pointer"><a href="#our-work">Our work</a></li>
+            <li class="cursor-pointer"><a href="#call">Contact</a></li>
+            <li class="cursor-pointer"><a href="#our-team">Our Team</a></li>
+          </ul>
+        </div>
+        <div class="h-[500px] sm:h-[300px] w-full">
+          <div class="swiper mySwiper w-full h-full">
+            <div class="swiper-wrapper">
+              <div
+                class="swiper-slide text-center flex items-center justify-center"
+              >
+                <div class="w-[300px] sm:w-[306px] md:w-[736px] self-center">
+                  <h3 class="text-[20px] xl:text-[24px] font-bold">
+                    Startup 3
+                  </h3>
+                  <h1 class="text-[35px] xl:text-[72px] font-bold">
+                    Forget About Code
+                  </h1>
+                  <p class="text-[20px] xl:text-[22px] font-medium">
+                    Startup Framework gives you complete freedom over your
+                    creative process — you don’t have to think about any
+                    technical aspects. There are no limits and absolutely no
+                    coding.
+                  </p>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div
+                  class="swiper-slide text-center flex items-center justify-center"
+                >
+                  <div class="w-[300px] sm:w-[306px] md:w-[736px] self-center">
+                    <h3 class="text-[20px] xl:text-[24px] font-bold">
+                      Startup 2
+                    </h3>
+                    <h1 class="text-[35px] xl:text-[72px] font-bold">
+                      Forget About time
+                    </h1>
+                    <p class="text-[20px] xl:text-[22px] font-medium">
+                      Startup Framework gives you complete freedom over your
+                      creative process — you don’t have to think about any
+                      technical aspects. There are no limits and absolutely no
+                      coding.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div
+                  class="swiper-slide text-center flex items-center justify-center"
+                >
+                  <div class="w-[300px] sm:w-[306px] md:w-[736px] self-center">
+                    <h3 class="text-[20px] xl:text-[24px] font-bold">
+                      Startup 1
+                    </h3>
+                    <h1 class="text-[35px] xl:text-[72px] font-bold">
+                      Forget About Code
+                    </h1>
+                    <p class="text-[20px] xl:text-[22px] font-medium">
+                      Startup Framework gives you complete freedom over your
+                      creative process — you don’t have to think about any
+                      technical aspects. There are no limits and absolutely no
+                      coding.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="swiper-slide">Slide 2</div>
-            <div class="swiper-slide">Slide 3</div>
+            <div
+              class="swiper-button-next !text-white after:!text-[30px]"
+            ></div>
+            <div
+              class="swiper-button-prev !text-white after:!text-[30px]"
+            ></div>
+            <div class="swiper-pagination2"></div>
           </div>
-          <div class="swiper-button-next !text-white after:!text-[30px]"></div>
-          <div class="swiper-button-prev !text-white after:!text-[30px]"></div>
-          <div class="swiper-pagination"></div>
         </div>
-      </div>
-      <div class="absolute top-[627px] w-full text-center">
-        <button
-          class="py-[17px] px-[35px] mx-auto rounded-[100px] bg-primary font-medium text-[18px]"
-        >
-          Create an Account
-        </button>
+        <div class="w-full text-center sm:mt-[117px]">
+          <a href="#form">
+            <button
+              class="py-[17px] px-[35px] mx-auto rounded-[100px] bg-primary font-medium text-[18px]"
+            >
+              Create an Account
+            </button>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -119,78 +175,137 @@
         </div>
       </div>
     </section>
-    <section class="w-full h-screen lg:h-full relative">
-      <div class="relative h-screen">
-        <img
-          class="w-full h-full object-cover"
-          src="./assets/features.png"
-          alt=""
-        />
-        <div class="h-full w-full absolute bg-[#5338ca7a] top-0 left-0"></div>
-      </div>
+    <section class="w-full h-screen lg:h-full relative" id="features">
       <div
-        class="absolute flex gap-[30px] w-full top-[50px] sm:top-[100px] lg:top-[100px] items-center"
+        class="relative h-screen"
+        style="
+          background-image: url('./assets/features.png');
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-color: #5338ca7a;
+        "
       >
-        <div class="hidden md:block">
-          <img
-            class="h-full w-full md:h-1/2 lg:h-1/2 lg:w-[900px]"
-            src="./assets/Mockup.png"
-            alt=""
-          />
-        </div>
-        <div class="md:w-full h-[700px] sm:h-[550px]">
-          <div class="swiper mySwiper feature">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide !justify-start">
-                <div
-                  class="text-start flex flex-col gap-[65px] w-full lg:w-[600px]"
-                >
-                  <div class="">
-                    <h1 class="text-[30px] sm:text-[42px]">
-                      We Create Something
-                    </h1>
-                    <p class="text-[12px] w-[90%] sm:text-[22px]">
-                      We have created a new product that will help designers,
-                      developers and companies create websites for their
-                      startups quickly and easily.
-                    </p>
-                  </div>
-                  <div class="flex gap-5">
+        <div
+          class="flex gap-[30px] flex-shrink-0 w-full py-[50px] sm:py-[100px] lg:py-[100px] items-center"
+        >
+          <div class="hidden md:block md:h-1/2 lg:w-[900px]">
+            <img
+              class="h-full w-full md:h-1/2 lg:w-[900px]"
+              src="./assets/Mockup.png"
+              alt=""
+            />
+          </div>
+          <div class="md:w-full h-[700px] sm:h-[550px]">
+            <div class="swiper mySwiper feature">
+              <div class="swiper-wrapper z-10">
+                <div class="swiper-slide !justify-start">
+                  <div
+                    class="text-start flex flex-col flex-shrink-0 gap-[65px] w-fit"
+                  >
                     <div class="">
-                      <img class="mb-[29px]" src="./assets/f-1.png" alt="" />
-                      <p class="text-[12px] sm:text-[14px] mb-[16px]">
-                        30 New feature pages
-                      </p>
-                      <p class="text-[13px] sm:text-[16px]">
-                        Startup Framework covers components and complex blocks
-                        which can easily.
+                      <h1 class="text-[30px] md:text-[42px]">
+                        We Create Something
+                      </h1>
+                      <p class="text-[12px] px-4 md:px-0 sm:text-[22px]">
+                        We have created a new product that will help designers,
+                        developers and companies create websites for their
+                        startups quickly and easily.
                       </p>
                     </div>
+                    <div
+                      class="flex gap-5 w-fit flex-shrink-0 flex-col sm:flex-row"
+                    >
+                      <div class="w-fit">
+                        <img
+                          class="w-6 f-6 object-contain md:w-[35px] h-[35px] mb-[29px]"
+                          src="./assets/f-1.png"
+                          alt=""
+                        />
+                        <p class="text-[12px] sm:text-[14px] mb-[16px]">
+                          30 New feature pages
+                        </p>
+                        <p class="text-[13px] sm:text-[16px]">
+                          Startup Framework covers components and complex blocks
+                          which can easily.
+                        </p>
+                      </div>
+                      <div class="w-fit">
+                        <img
+                          src="./assets/f-2.png"
+                          class="mb-[29px] w-6 f-6 object-contain md:w-[35px] h-[35px]"
+                          alt=""
+                        />
+                        <p class="text-[12px] sm:text-[14px] pb-[16px]">
+                          Useful Symbol Components
+                        </p>
+                        <p class="text-[13px] sm:text-[16px]">
+                          Samples will show you the feeling on how to play
+                          around using the components.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="swiper-slide">
+                  <div
+                    class="text-start flex flex-col flex-shrink-0 gap-[65px] w-fit"
+                  >
                     <div class="">
-                      <img src="./assets/f-2.png" class="mb-[29px]" alt="" />
-                      <p class="text-[12px] sm:text-[14px] pb-[16px]">
-                        Useful Symbol Components
+                      <h1 class="text-[30px] md:text-[42px]">
+                        We Create Something
+                      </h1>
+                      <p class="text-[12px] px-4 md:px-0 sm:text-[22px]">
+                        We have created a new product that will help designers,
+                        developers and companies create websites for their
+                        startups quickly and easily.
                       </p>
-                      <p class="text-[13px] sm:text-[16px]">
-                        Samples will show you the feeling on how to play around
-                        using the components.
-                      </p>
+                    </div>
+                    <div
+                      class="flex gap-5 w-fit flex-shrink-0 flex-col sm:flex-row"
+                    >
+                      <div class="w-fit">
+                        <img
+                          class="w-6 f-6 object-contain md:w-[35px] h-[35px] mb-[29px]"
+                          src="./assets/f-1.png"
+                          alt=""
+                        />
+                        <p class="text-[12px] sm:text-[14px] mb-[16px]">
+                          30 New feature pages
+                        </p>
+                        <p class="text-[13px] sm:text-[16px]">
+                          Startup Framework covers components and complex blocks
+                          which can easily.
+                        </p>
+                      </div>
+                      <div class="w-fit">
+                        <img
+                          src="./assets/f-2.png"
+                          class="mb-[29px] w-6 f-6 object-contain md:w-[35px] h-[35px]"
+                          alt=""
+                        />
+                        <p class="text-[12px] sm:text-[14px] pb-[16px]">
+                          Useful Symbol Components
+                        </p>
+                        <p class="text-[13px] sm:text-[16px]">
+                          Samples will show you the feeling on how to play
+                          around using the components.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="swiper-slide">Slide 2</div>
-              <div class="swiper-slide">Slide 3</div>
+
+              <div
+                class="swiper-pagination !h-fit flex flex-col gap-1 justify-center items-end px-2"
+              ></div>
             </div>
-            <div
-              class="swiper-pagination flex flex-col gap-1 justify-center items-end !right-10 w-fit"
-            ></div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="w-full h-fit">
+    <section class="w-full h-fit" id="form">
       <div
         class="h-full py-12 md:py0 md:h-screen relative"
         style="
@@ -252,16 +367,24 @@
                 <div
                   class="flex flex-col gap-[30px] py-[45px] sm:py-[69px] w-full px-6 sm:w-[330px] self-center mx-auto"
                 >
-                  <input
-                    type="text"
-                    placeholder="Your email"
-                    class="py-[12px] pl-[24px] border-[2px] border-[#EBEAED] rounded-[100px]"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Your password"
-                    class="py-[12px] pl-[24px] border-[2px] border-[#EBEAED] rounded-[100px]"
-                  />
+                  <div class="">
+                    <input
+                      id="sihnup-email"
+                      type="text"
+                      placeholder="Your email"
+                      class="py-[12px] w-full text-primary pl-[24px] border-[2px] border-[#EBEAED] rounded-[100px]"
+                    />
+                    <p class="text-red-500" id="signup-emil-eror"></p>
+                  </div>
+                  <div class="">
+                    <input
+                      id="sihnup-password"
+                      type="text"
+                      placeholder="Your password"
+                      class="py-[12px] w-full text-primary pl-[24px] border-[2px] border-[#EBEAED] rounded-[100px]"
+                    />
+                    <p class="text-red-500" id="signup-pass-eror"></p>
+                  </div>
                   <button
                     class="py-[12px] pl-[24px] border-[2px] bg-[#25DAC5] border-[#EBEAED] rounded-[100px]"
                   >
@@ -283,16 +406,24 @@
                 <div
                   class="flex flex-col gap-[30px] py-[45px] sm:py-[69px] w-full px-6 sm:w-[330px] self-center mx-auto"
                 >
-                  <input
-                    type="text"
-                    placeholder="Your email"
-                    class="py-[12px] pl-[24px] border-[2px] border-[#EBEAED] rounded-[100px]"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Your password"
-                    class="py-[12px] pl-[24px] border-[2px] border-[#EBEAED] rounded-[100px]"
-                  />
+                  <div class="">
+                    <input
+                      id="signin-email"
+                      type="text"
+                      placeholder="Your email"
+                      class="py-[12px] w-full text-primary pl-[24px] border-[2px] border-[#EBEAED] rounded-[100px]"
+                    />
+                    <p class="text-red-500" id="signin-emil-eror"></p>
+                  </div>
+                  <div class="">
+                    <input
+                      id="signin-password"
+                      type="text"
+                      placeholder="Your password"
+                      class="py-[12px] w-full text-primary pl-[24px] border-[2px] border-[#EBEAED] rounded-[100px]"
+                    />
+                    <p class="text-red-500" id="signin-pass-eror"></p>
+                  </div>
                   <button
                     class="py-[12px] pl-[24px] border-[2px] bg-[#25DAC5] border-[#EBEAED] rounded-[100px]"
                   >
@@ -319,7 +450,7 @@
     </section>
     <!-- call to action -->
 
-    <section class="w-full">
+    <section class="w-full" id="call">
       <div
         class="h-full"
         style="
@@ -333,12 +464,12 @@
       >
         <div class="lg:py-[180px] py-[100px] w-full mx-auto">
           <div class="mx-auto w-fit">
-            <div class="w-full sm:w-[770px] text-center mb-[58px]">
+            <div class="w-full lg:w-[770px] text-center mb-[58px]">
               <h1 class="text-[30px] md:text-[58px]">
                 Easy to setup. <br />Easy to maintain
               </h1>
               <p
-                class="text-[17px] md:text-[22px] px-4 sm:p-0 w-full md:w-[518px] mx-auto"
+                class="text-[17px] md:text-[22px] px-4 lg:p-0 w-full lg:w-[518px] mx-auto"
               >
                 Bootstrap is a widely-used, sleek, intuitive and powerful
                 front-end framework for faster and easier web development.
@@ -352,12 +483,15 @@
                   class="object-contain w-[17px] h-[17px] invert mx-auto"
                   src="./assets/play-icon.svg"
                   alt=""
-                /></button
-              ><button
-                class="py-[10px] px-[38px] md:py-[22px] md:px-[50px] bg-[#25DAC5] rounded-[100px] text-[20px]"
-              >
-                Get Started
+                />
               </button>
+              <a href="#countact-us">
+                <button
+                  class="py-[10px] px-[38px] md:py-[22px] md:px-[50px] bg-[#25DAC5] rounded-[100px] text-[20px]"
+                >
+                  Get Started
+                </button>
+              </a>
             </div>
           </div>
         </div>
@@ -365,7 +499,7 @@
     </section>
 
     <!-- show case -->
-    <section class="bg-[#1E0E62] w-full h-full">
+    <section class="bg-[#1E0E62] w-full h-full" id="our-work">
       <div class="py-[100px] mx-auto w-full h-full">
         <div class="w-fit mx-auto">
           <div class="flex items-center justify-between mb-[40px] px-3 sm:p-0">
@@ -386,7 +520,7 @@
 
     <!-- teams -->
 
-    <section class="bg-[#1E0E62] w-full h-full">
+    <section class="bg-[#1E0E62] w-full h-full" id="out-team">
       <div
         class="py-[50px] px-[50px] md:py-[100px] md:px-[115px] w-full h-full"
       >
@@ -395,7 +529,7 @@
             <h1 class="inline-block mb-[40px] text-[35px] md:text-[42px]">
               Startup Crew
             </h1>
-            <p class="w-full md:w-[754px] text-[18px] sm:text-[22px]">
+            <p class="w-full lg:w-[754px] text-[18px] sm:text-[22px]">
               The most important part of the Startup Framework is the samples.
               The samples form a set of 25 usable pages you can use as is or you
               can add new blocks from UI Kit.
@@ -410,7 +544,7 @@
     </section>
 
     <!-- contect -->
-    <section class="w-full h-full">
+    <section class="w-full h-full" id="countact-us">
       <div
         class="h-full"
         style="
@@ -467,18 +601,21 @@
                   <div class="flex gap-[30px] flex-col sm:flex-row">
                     <div class="flex flex-col">
                       <label class="font-medium" for="name">YOUR NAME</label>
+
                       <input
                         type="text"
+                        id="name"
                         placeholder="First name"
                         class="py-2 pl-5 sm:py-[12px] sm:pl-[24px] border-[2px] border-[#EBEAED] rounded-[100px]"
                       />
+                      <p class="text-red-500" id="name-field"></p>
                     </div>
                     <div class="flex flex-col w-[140px]">
                       <label class="font-medium" for="budget">BUDGET</label>
                       <select
                         class="py-2 pl-5 sm:py-[12px] sm:pl-[24px] border-[2px] bg-white text-[#1E0E62] font-semibold border-[#EBEAED] rounded-[100px]"
                         name="budget"
-                        id=""
+                        id="budget"
                       >
                         <option value="100">$100</option>
                         <option value="200">$200</option>
@@ -491,21 +628,25 @@
                   <div class="flex flex-col">
                     <label class="font-medium" for="input">INPUT FIELD</label>
                     <input
+                      id="email"
                       type="text"
                       placeholder="name@mail.com"
                       class="py-2 pl-5 sm:py-[12px] sm:pl-[24px] border-[2px] border-[#EBEAED] rounded-[100px]"
                     />
+                    <p class="text-red-500" id="email-field"></p>
                   </div>
                   <div class="flex flex-col">
                     <label class="font-medium" for="message"
                       >YOUR MESSAGE</label
                     >
                     <textarea
+                      id="message"
                       type="text"
                       placeholder="Message"
                       cols="5"
                       class="py-2 pl-5 sm:py-[12px] sm:pl-[24px] border-[2px] border-[#EBEAED] rounded-[10px]"
                     ></textarea>
+                    <p class="text-red-500" id="message-field"></p>
                   </div>
                   <div
                     class="flex justify-between items-center flex-col sm:flex-row gap-3"
@@ -535,7 +676,7 @@
       </div>
     </section>
 
-    <section class="w-full h-full">
+    <section class="w-full h-full" id="plan-pricing">
       <div
         class="h-full"
         style="
@@ -564,7 +705,7 @@
           <div class="w-full mx-auto">
             <div
               id="pricing"
-              class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[30px] w-fit mx-auto"
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[30px] w-fit mx-auto"
             ></div>
           </div>
         </div>
@@ -580,21 +721,21 @@
           <div
             class="flex gap-[30px] md:items-center text-[16px] flex-col md:flex-row"
           >
-            <p>Privacy Policy</p>
-            <p>Terms</p>
+            <p class="cursor-pointer"><a href="#">Privacy Policy</a></p>
+            <p class="cursor-pointer"><a href="#">Terms</a></p>
             <div class="flex gap-[30px] items-start">
               <img
-                class="w-[17px] h-[17px] invert"
+                class="w-[17px] h-[17px] invert cursor-pointer"
                 src="./assets/twitter.svg"
                 alt=""
               />
               <img
-                class="w-[17px] h-[17px] invert"
+                class="w-[17px] h-[17px] invert cursor-pointer"
                 src="./assets/fb.svg"
                 alt=""
               />
               <img
-                class="w-[17px] h-[17px] invert"
+                class="w-[17px] h-[17px] invert cursor-pointer"
                 src="./assets/insta.svg"
                 alt=""
               />
@@ -606,12 +747,16 @@
           class="flex md:justify-between gap-[10px] text-[16px] flex-col md:flex-row"
         >
           <ul class="flex gap-[30px] md:items-center flex-col md:flex-row">
-            <li>Tour</li>
-            <li>Features</li>
-            <li>Pricing Plans</li>
-            <li>Our Works</li>
-            <li>Brands</li>
-            <li>Contacts</li>
+            <li class="cursor-pointer"><a href="#home">Tour</a></li>
+            <li class="cursor-pointer"><a href="#features">Features</a></li>
+            <li class="cursor-pointer">
+              <a href="#plan-pricing">Pricing Plans</a>
+            </li>
+            <li class="cursor-pointer">
+              <a href="#plan-pricing">Our Works</a>
+            </li>
+            <li class="cursor-pointer"><a href="#out-team">Teams</a></li>
+            <li class="cursor-pointer"><a href="#countact-us">Contacts</a></li>
           </ul>
           <p>© 2017 Designmodo. All rights reserved.</p>
         </div>
@@ -620,29 +765,7 @@
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
     <script type="module" src="./script.js"></script>
-    <!-- Initialize Swiper -->
-    <script>
-      var swiper = new Swiper(".mySwiper", {
-        cssMode: true,
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
-        mousewheel: true,
-        keyboard: true,
-      });
-      var swiper = new Swiper(".feature", {
-        direction: "vertical",
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
-      });
-    </script>
   </body>
 </html>

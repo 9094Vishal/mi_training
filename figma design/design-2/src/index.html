@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head class="dark">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./output.css" />
+    <style>
+      #imgList::-webkit-scrollbar {
+        display: none;
+      }
+      #imgList {
+        -webkit-overflow-scrolling: touch;
+      }
+      .active {
+        background-color: #ee6c4d;
+      }
+    </style>
+  </head>
+  <body class="dark:text-white text-black dark:bg-darkBg">
+    <nav
+      class="dark:bg-[#3D5A80] bg-[#F9F9F9] flex items-center justify-between px-4 sm:px-[25px] md:px-[55px] lg:px-[75px] xl:px-[81px] border-b dark:border-[#0000001F]"
+    >
+      <div class="text-[18px] font-bold cursor-pointer">
+        <a href="#">IWMYWF</a>
+      </div>
+      <div class="sm:hidden">&#9776;</div>
+      <ul
+        class="items-center hidden sm:flex sm:gap-[22px] lg:gap-[38px] xl:gap-[48px] py-[20px]"
+      >
+        <li class="cursor-pointer hover:text-gray-400 inline-block text-base">
+          Home
+        </li>
+        <li class="cursor-pointer hover:text-gray-400 inline-block text-base">
+          About Me
+        </li>
+        <li class="cursor-pointer hover:text-gray-400 inline-block text-base">
+          Works
+        </li>
+        <li class="cursor-pointer hover:text-gray-400 inline-block text-base">
+          Blog
+        </li>
+        <li class="cursor-pointer hover:text-gray-400 inline-block text-base">
+          Button
+        </li>
+      </ul>
+    </nav>
+
+    <section
+      class="dark:bg-[#3D5A80] bg-[#F9F9F9] flex h-[545px] gap-3 flex-col-reverse md:flex-row"
+    >
+      <div class="md:w-[65%] lg:w-[70%] w-full">
+        <div
+          class="px-5 md:px-0 md:pt-[75px] md:pl-[100px] lg:pt[80px] lg:pl-[140px] xl:pt-[123px] xl:pl-[160px] w-full"
+        >
+          <div class="lg:w-[500px] xl:w-[526px]">
+            <h1
+              class="text-base sm:text-lg md:text-xl lg:text-3xl xl:text-[40px] font-bold mb-4"
+            >
+              Create your website <br />
+              in
+              <span class="text-btn">less than 12days </span>
+            </h1>
+            <p class="text-sm md:text-lg mb-6">
+              Hey, I’m Mark Essein. A fullstack web developer with 7 years
+              experience building successful websites and applications. I can
+              build a high converting website for you as quick as possible!
+            </p>
+            <button
+              class="text-sm md:text-base bg-btn py-3 px-[46px] rounded-[5px] mb-5"
+            >
+              Get in Touch
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="w-full md:w-[35%] lg:w-[30%] h-[293px] md:h-fit">
+        <div
+          class="mx-auto md:mx-0 h-[150px] w-[150px] md:w-[200px] md:h-[200px] lg:h-[273px] lg:w-[273px] relative bg-darkBg rounded-full md:mt-[48px]"
+        >
+          <img
+            class="h-[270px] w-[200px] md:h-[474px] top-[23px] md:w-[315px] absolute"
+            src="./assets/men.png"
+            alt=""
+          />
+        </div>
+      </div>
+    </section>
+    <section class="md:h-[745px]">
+      <div
+        class="p-4 md:p-0 flex gap-3 flex-col md:flex-row flex-shrink-0 mb-[65px]"
+      >
+        <div
+          class="pt-[101px] md:pl-[120px] lg:pl-[165px] xl:pl-[192px] w-full md:w-1/2"
+        >
+          <div
+            class="w-[275px] h-[275px] sm:w-[300px] sm:h-[200px] lg:w-[351px] mx-auto lg:h-[297px] xl:w-[371px] xl:h-[308px]"
+          >
+            <img
+              src="./assets/language.png"
+              class="w-full h-full object-contain"
+              alt=""
+            />
+          </div>
+        </div>
+        <div class="w-full md:w-1/2 pt-[79px] md:pr-[160px] lg:pr-[182px]">
+          <h1 class="text-xl md:text-[28px]">About Me</h1>
+          <div class="bg-btn h-[3px] w-full my-[16px]"></div>
+          <p class="text-sm md:text-base lg:text-lg">
+            My passion for building websites started since 2013 and since then i
+            have helped companies around the world build amazing websites and
+            products that create real value for the business and users. <br />
+            I enjoy solving problems with clean scalable solutions and I also
+            have a genuine passion for inspiring design. <br />
+            I am a fullstack developer focusing on core frontend and backend
+            technologies which include HTML, CSS, Javascript, React and other
+            core languages
+          </p>
+        </div>
+      </div>
+
+      <div class="dark:bg-[#2F3746] w-full bg-[#F9F9F9] py-[48px]">
+        <div class="w-full text-center">
+          <h1 class="mx-auto text-[20px] md:text-[24px] lg:text-[28px]">
+            Companies I have worked for
+          </h1>
+          <div class="bg-btn h-[3px] mx-auto my-[16px] w-[132px]"></div>
+        </div>
+        <div id="companys" class="text-center pt-[48px]"></div>
+      </div>
+    </section>
+    <section class="w-full py-[48px]">
+      <div class="w-fit mx-auto">
+        <div class="w-full">
+          <h1 class="text-[20px] md:text-[24px] lg:text-[28px]">
+            My Recent Works
+          </h1>
+          <div class="bg-btn h-[3px] my-[16px] w-[187px]"></div>
+        </div>
+        <div
+          class="pt-[40px] w-fit grid-cols-1 md:grid-cols-2 grid lg:grid-cols-3 gap-[42px] pb-[64px]"
+          id="mywork"
+        ></div>
+        <div class="w-full mx-auto text-center">
+          <button
+            class="w-fit text-btn border border-btn rounded-[5px] py-3 px-[56.5px]"
+          >
+            #EE6C4D
+          </button>
+        </div>
+      </div>
+    </section>
+    <section class="dark:bg-[#2F3746] w-full bg-[#F9F9F9] py-[48px]">
+      <div class="w-full text-center">
+        <h1 class="mx-auto text-[20px] md:text-[24px] lg:text-[28px]">
+          What my clients say
+        </h1>
+        <div class="bg-btn h-[3px] mx-auto my-[16px] w-[132px]"></div>
+      </div>
+      <div class="flex items-center mx-auto px-[140px]">
+        <div
+          class="scroll-arrow pr-[33px] inline-block align-middle cursor-pointer p-0 m-0 opacity-50 text-[34px] transition duration-[0.2s] hover:transition hover:duration-[0.2s] hover:opacity-100"
+          id="scroll-testo-left"
+        >
+          &#8592;
+        </div>
+        <div class="pt-[48px] flex gap-[30px] mx-auto overflow-x-hidden">
+          <div id="client" class="flex flex-nowrap w-fit mx-auto gap-[75px]">
+            <div
+              class="w-[475px] dark:bg-[#00000073] bg-white py-[15px] px-[18px]"
+            >
+              <div class="flex flex-shrink-0 justify-between items-center">
+                <div class="flex items-center gap-1">
+                  <img src="./assets/client1.png" alt="" />
+                  <div class="text-start">
+                    <h2 class="text-sm md:text-base lg:text-lg">Charles Dim</h2>
+                    <p class="text-[#C5C5C5] text-xs md:text-sm">
+                      Lead Designer, Netflix
+                    </p>
+                  </div>
+                </div>
+                <div class=""><img src="./assets/quote.svg" alt="" /></div>
+              </div>
+              <div class="py-[15px]">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+                tincidunt in malesuada tristique arcu non eu lectus orci. Amet
+                non, sed eget ultrices cursus diam orci. Risus sed tristique
+                lectus fusce lacus.
+              </div>
+            </div>
+            <div
+              class="w-[475px] dark:bg-[#00000073] bg-white py-[15px] px-[18px]"
+            >
+              <div class="flex flex-shrink-0 justify-between items-center">
+                <div class="flex items-center gap-1">
+                  <img src="./assets/client1.png" alt="" />
+                  <div class="text-start">
+                    <h2 class="text-sm md:text-base lg:text-lg">Charles Dim</h2>
+                    <p class="text-[#C5C5C5] text-xs md:text-sm">
+                      Lead Designer, Netflix
+                    </p>
+                  </div>
+                </div>
+                <div class=""><img src="./assets/quote.svg" alt="" /></div>
+              </div>
+              <div class="py-[15px]">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+                tincidunt in malesuada tristique arcu non eu lectus orci. Amet
+                non, sed eget ultrices cursus diam orci. Risus sed tristique
+                lectus fusce lacus.
+              </div>
+            </div>
+            <div
+              class="w-[475px] dark:bg-[#00000073] bg-white py-[15px] px-[18px]"
+            >
+              <div class="flex flex-shrink-0 justify-between items-center">
+                <div class="flex items-center gap-1">
+                  <img src="./assets/client1.png" alt="" />
+                  <div class="text-start">
+                    <h2 class="text-sm md:text-base lg:text-lg">Charles Dim</h2>
+                    <p class="text-[#C5C5C5] text-xs md:text-sm">
+                      Lead Designer, Netflix
+                    </p>
+                  </div>
+                </div>
+                <div class=""><img src="./assets/quote.svg" alt="" /></div>
+              </div>
+              <div class="py-[15px]">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+                tincidunt in malesuada tristique arcu non eu lectus orci. Amet
+                non, sed eget ultrices cursus diam orci. Risus sed tristique
+                lectus fusce lacus.
+              </div>
+            </div>
+            <div
+              class="w-[475px] dark:bg-[#00000073] bg-white py-[15px] px-[18px]"
+            >
+              <div class="flex flex-shrink-0 justify-between items-center">
+                <div class="flex items-center gap-1">
+                  <img src="./assets/client1.png" alt="" />
+                  <div class="text-start">
+                    <h2 class="text-sm md:text-base lg:text-lg">Charles Dim</h2>
+                    <p class="text-[#C5C5C5] text-xs md:text-sm">
+                      Lead Designer, Netflix
+                    </p>
+                  </div>
+                </div>
+                <div class=""><img src="./assets/quote.svg" alt="" /></div>
+              </div>
+              <div class="py-[15px]">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+                tincidunt in malesuada tristique arcu non eu lectus orci. Amet
+                non, sed eget ultrices cursus diam orci. Risus sed tristique
+                lectus fusce lacus.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="scroll-arrow pl-[33px] inline-block align-middle cursor-pointer p-0 m-0 opacity-50 text-[34px] transition duration-[0.2s] hover:transition hover:duration-[0.2s] hover:opacity-100"
+          id="scroll-testo-right"
+        >
+          &#8594;
+        </div>
+      </div>
+      <div
+        class="flex items-center justify-center pt-[40px] gap-2"
+        id="bullets"
+      >
+        <div class="w-[11px] h-[11px] bg-btn rounded-full"></div>
+      </div>
+    </section>
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>
