@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Store</title>
+    <link rel="stylesheet" href="../style/style.css" />
+    <link rel="stylesheet" href="../style/output.css" />
+  </head>
+  <body class="relative">
+    <div
+      id="hamburger-menu"
+      class="hidden absolute top-0 right-0 h-screen w-full bg-white z-10"
+    ></div>
+    <nav></nav>
+    <main>
+      <section class="w-[70%] bg-white p-5 mx-auto my-12">
+        <h1 class="text-xl md:text-[40px]">Add product</h1>
+        <hr class="my-4" />
+        <div class="add-product-wrapper w-full">
+          <form action="#" id="add-product-form">
+            <div class="input-wrapper flex flex-col gap-3">
+              <label for="name">Product name</label>
+              <input
+                type="text"
+                class="border py-2 px-3 border-[#1A374D] rounded-lg outline-none"
+                id="name"
+                placeholder="Product name.."
+              />
+              <p class="text-red-700"></p>
+            </div>
+            <div class="input-wrapper flex flex-col gap-3">
+              <label for="category">Product category</label>
+              <select
+                name=""
+                id="category"
+                class="border py-2 px-3 border-[#1A374D] rounded-lg outline-none"
+              >
+                <option value="section">select</option>
+              </select>
+
+              <p class="text-red-700"></p>
+            </div>
+            <div class="input-wrapper flex flex-col gap-3">
+              <label for="decription">Product Description</label>
+              <textarea
+                class="border py-2 px-3 border-[#1A374D] rounded-lg outline-none"
+                id="decription"
+                placeholder="Product Description.."
+              ></textarea>
+              <p class="text-red-700"></p>
+            </div>
+            <div class="input-wrapper flex flex-col gap-3">
+              <label for="price">Product price</label>
+              <input
+                type="text"
+                id="price"
+                placeholder="Product price.."
+                class="border py-2 px-3 border-[#1A374D] rounded-lg outline-none"
+              />
+              <p class="text-red-700"></p>
+            </div>
+            <div class="input-wrapper flex flex-col gap-3">
+              <label for="discount">Product discount</label>
+              <input
+                class="border py-2 px-3 border-[#1A374D] rounded-lg outline-none"
+                type="text"
+                class="border py-2 px-3 border-[#1A374D] rounded-lg outline-none"
+                id="discount"
+                placeholder="Product discount.."
+              />
+              <p class="text-red-700"></p>
+            </div>
+            <div class="input-wrapper flex flex-col gap-3">
+              <label for="brand">Product brand</label>
+              <input
+                type="text"
+                id="brand"
+                placeholder="Product brand.."
+                class="border py-2 px-3 border-[#1A374D] rounded-lg outline-none"
+              />
+              <p class="text-red-700"></p>
+            </div>
+            <div class="input-wrapper flex flex-col gap-3">
+              <label for="image">Product Image</label>
+              <div class="" id="images-wrapper">
+                <div class="flex gap-2">
+                  <input
+                    type="text"
+                    id="image"
+                    placeholder="Product image.."
+                    class="images border py-2 px-3 border-[#1A374D] rounded-lg outline-none w-full"
+                  />
+                  <button class="add-btn w-fit py-2 px-5" type="button">
+                    Add
+                  </button>
+                </div>
+              </div>
+              <p class="text-red-700"></p>
+            </div>
+            <div class="input-wrapper flex-col gap-3 flex" id="quntity-wrapper">
+              <label for="quntity"> Quntity</label>
+              <input
+                min="0"
+                type="number"
+                class="border py-2 px-3 border-[#1A374D] rounded-lg outline-none"
+                id="quntity"
+                placeholder="Product quntity.."
+              />
+              <p class="text-red-700"></p>
+            </div>
+            <div class="input-wrapper flex flex-col gap-3">
+              <label for="warranty">Product warranty</label>
+              <select
+                name=""
+                class="border py-2 px-3 border-[#1A374D] rounded-lg outline-none"
+                id="warranty"
+              >
+                <option value="select" key="">Select</option>
+                <option value="6month" key="">6 Months</option>
+                <option value="1year" key="">1 Year</option>
+                <option value="2year" key="">2 Year</option>
+                <option value="3year" key="">3 Year</option>
+                <option value="4year" key="">4 Year</option>
+                <option value="5year" key="">5 Year</option>
+                <option value="5+" key="">5 Year +</option>
+              </select>
+
+              <p class="text-red-700"></p>
+            </div>
+            <div class="input-wrapper flex flex-col gap-3">
+              <label for="return-policy">Return policy</label>
+              <select
+                name=""
+                class="border py-2 px-3 border-[#1A374D] rounded-lg outline-none"
+                id="return-policy"
+              >
+                <option value="select" key="">Select</option>
+                <option value="2Days" key="">2 Days</option>
+                <option value="5Days" key="">5 Days</option>
+                <option value="7Days" key="">7 Days</option>
+                <option value="10Days" key="">10 Days</option>
+                <option value="15Days" key="">15 Days</option>
+                <option value="1month" key="">1 Month</option>
+              </select>
+
+              <p class="text-red-700"></p>
+            </div>
+            <button class="py-2 px-[56px] w-fit mx-auto">Add Product</button>
+          </form>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="../script/storeManager/addproduct.js"></script>
+  </body>
+</html>
