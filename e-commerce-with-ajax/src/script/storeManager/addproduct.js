@@ -1,4 +1,8 @@
-import { setNavBar } from "../helper.js";
+import { sendNotification } from "../customNotification.js";
+import { getcurrentUser, listOfProducts, setNavBar } from "../helper.js";
+
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get("productId");
 
 document.addEventListener("DOMContentLoaded", () => {
   setNavBar(false);
@@ -17,19 +21,100 @@ document.addEventListener("DOMContentLoaded", () => {
   let selectedWarranty = null;
   let selectedReturnPolicy = null;
   let selectedCategory = null;
+  let myProducts;
+  const deleteElement = (element) => {
+    if (imageWrapper.childNodes.length === 1) {
+      imageWrapper.parentElement.classList.add("hidden");
+      imageWrapper.parentElement.classList.remove("flex");
+    }
+    element.target.parentElement.remove();
+  };
+  if (productId) {
+    document.getElementById("title").innerHTML = "Edit product";
+    document.getElementById("save-btn").innerHTML = "Edit product";
 
+    myProducts = listOfProducts().find((item) => item.id == productId);
+    name.value = myProducts.title;
+    decription.value = myProducts.description;
+    price.value = myProducts.price;
+    discount.value = myProducts.discountPercentage;
+    brand.value = myProducts.brand;
+    quntity.value = myProducts.stock;
+    warranty.value = myProducts.warrantyInformation;
+    returnPolicy.value = myProducts.returnPolicy;
+    imageWrapper.parentElement.classList.remove("hidden");
+    imageWrapper.parentElement.classList.add("flex");
+    console.log(myProducts.images);
+
+    myProducts.images.map((image) => {
+      const div = document.createElement("div");
+      div.setAttribute("class", "flex gap-2 my-1 input-holder");
+      div.innerHTML = `
+                   <input
+                    type="text"
+                    
+                    placeholder="Product image.."
+                    value="${image}"
+                    class="images-list border py-2 px-3 border-[#1A374D] rounded-lg outline-none w-full"
+                  />
+                  <button
+                    class="remove-btn w-fit py-2 text-xl font-semibold  px-5"
+                    id="remove"
+                    type="button"
+                  >
+                   -
+                  </button>
+  `;
+
+      imageWrapper.appendChild(div);
+      div.lastElementChild.addEventListener("click", deleteElement);
+    });
+  }
   // adding inputs
-  <div class="flex gap-2">
-    <input
-      type="text"
-      id="image"
-      placeholder="Product image.."
-      class="images border py-2 px-3 border-[#1A374D] rounded-lg outline-none w-full"
-    />
-    <button class="add-btn w-fit py-2 px-5" type="button">
-      Add
-    </button>
-  </div>;
+
+  const addBtns = document.getElementById("add-btn");
+  const imageRegax = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gim;
+  const imageError = document.getElementById("images-error");
+
+  const input = addBtns.previousElementSibling;
+
+  addBtns.addEventListener("click", () => {
+    if (input.value.toString().trim() === "") {
+      imageError.innerHTML = "Please write product image url...";
+      return;
+    }
+    if (input.value.match(imageRegax)) {
+      const div = document.createElement("div");
+      div.setAttribute("class", "flex gap-2 my-1 input-holder");
+
+      div.innerHTML = `
+                   <input
+                    type="text"
+                    
+                    placeholder="Product image.."
+                    value="${input.value}"
+                    class="images-list border py-2 px-3 border-[#1A374D] rounded-lg outline-none w-full"
+                  />
+                  <button
+                    class="remove-btn w-fit py-2 text-xl font-semibold px-5"
+                    id="remove"
+                    type="button"
+                  >
+                    -
+                  </button>
+  `;
+      imageWrapper.parentElement.classList.remove("hidden");
+
+      imageWrapper.parentElement.classList.add("flex");
+      imageWrapper.appendChild(div);
+      div.lastElementChild.addEventListener("click", deleteElement);
+      input.value = "";
+    } else {
+      imageError.innerHTML =
+        "Image must contain .jpg/.jpeg/.png/.webp formates";
+      return;
+    }
+  });
 
   const categories = [
     "beauty",
@@ -63,7 +148,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   categoryHtml += categories
     .map((option) => {
-      return `<option value="${option}" key="">
+      return `<option value="${option}" ${
+        productId && option == myProducts.category ? "selected" : ""
+      } key="">
         ${option}
       </option>`;
     })
@@ -134,6 +221,13 @@ document.addEventListener("DOMContentLoaded", () => {
       quntity.nextElementSibling.innerHTML = "";
     }
   });
+  input.addEventListener("input", (e) => {
+    if (input.value.toString().trim() === "") {
+      imageError.innerHTML = "This field is required...";
+    } else {
+      imageError.innerHTML = "";
+    }
+  });
 
   document
     .getElementById("add-product-form")
@@ -152,6 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
           quntity,
         ])
       ) {
+        const productId = Date.now();
         const productData = {
           title: name.value,
           category: category.value,
@@ -162,9 +257,16 @@ document.addEventListener("DOMContentLoaded", () => {
           warrantyInformation: warranty.value,
           returnPolicy: returnPolicy.value,
           stock: quntity.value,
+          rating: 0,
           availabilityStatus: quntity.value != 0 ? "In stock" : "Out of stock",
+          images: images,
+          shippingInformation: "Ships in 1 month",
         };
         console.log(productData);
+
+        if (myProducts) {
+          editProduct(productData, myProducts.id);
+        } else addProduct(productData, productId);
       }
     });
   const validate = (elements = []) => {
@@ -189,14 +291,6 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         selectedCategory = category.value;
       }
-      if (returnPolicy.value === "select") {
-        returnPolicy.nextElementSibling.innerHTML = "This field is required...";
-        returnPolicy.focus();
-        allDone = false;
-        return;
-      } else {
-        selectedReturnPolicy = returnPolicy.value;
-      }
       if (warranty.value === "select") {
         warranty.nextElementSibling.innerHTML = "This field is required...";
         warranty.focus();
@@ -205,8 +299,81 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         selectedWarranty = warranty.value;
       }
+      if (returnPolicy.value === "select") {
+        returnPolicy.nextElementSibling.innerHTML = "This field is required...";
+        returnPolicy.focus();
+        allDone = false;
+        return;
+      } else {
+        selectedReturnPolicy = returnPolicy.value;
+      }
+
+      if (input.value === "" && imageWrapper.childNodes.length === 0) {
+        imageError.innerHTML = "This field is required...";
+        input.focus();
+        allDone = false;
+        return;
+      } else if (imageWrapper.childNodes.length !== 0) {
+        document.querySelectorAll(".images-list").forEach((item) => {
+          images.push(item.value);
+        });
+      } else {
+        imageError.innerHTML = "Atleast one image is required...";
+        allDone = false;
+        return;
+      }
     }
 
     return allDone;
   };
 });
+const addProduct = (productData, productId) => {
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "https://dummyjson.com/products/add", true);
+  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhr.send(JSON.stringify(productData));
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 201) {
+      sendNotification("success", "Product Added succesfully...");
+      const userData = JSON.parse(
+        localStorage.getItem(getcurrentUser().toString())
+      );
+      let products = listOfProducts();
+      if (!products) {
+        products = [];
+      }
+      products.push({ ...productData, id: productId });
+
+      if (userData.store) {
+        userData.store.push(productId);
+      } else {
+        userData.store = [];
+        userData.store.push(productId);
+      }
+
+      localStorage.setItem("products", JSON.stringify(products));
+      localStorage.setItem(
+        getcurrentUser().toString(),
+        JSON.stringify(userData)
+      );
+
+      location = "/src/storeManager/dash-board.html";
+    } else if (xhr.readyState === 4 && xhr.status !== 201) {
+      sendNotification("error", "Fail to add product...");
+      location.reload();
+    }
+  };
+};
+const editProduct = (productData, id) => {
+  console.log("productData: ", id);
+  let allUserProduct = listOfProducts();
+
+  allUserProduct = allUserProduct.map((item, index) =>
+    item.id == id
+      ? { ...allUserProduct[index][id], ...productData }
+      : { ...item }
+  );
+  console.log("allUserProduct: ", allUserProduct);
+  localStorage.setItem("products", JSON.stringify(allUserProduct));
+  location = "/src/storeManager/dash-board.html";
+};

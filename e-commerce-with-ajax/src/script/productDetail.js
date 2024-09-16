@@ -1,4 +1,4 @@
-import { setNavBar } from "./helper.js";
+import { getUserAccountType, listOfProducts, setNavBar } from "./helper.js";
 
 import { addToCart } from "./helper.js";
 let quntity = 1;
@@ -9,9 +9,15 @@ const urlParams = new URLSearchParams(window.location.search);
 const request = new XMLHttpRequest();
 request.onload = function () {
   if (this.status === 404) {
-    document.getElementById(
-      "product-detail-wrapper"
-    ).innerHTML = ` <div class="h-[450px]">
+    const data = listOfProducts().find(
+      (item) => item.id == urlParams.get("productId")
+    );
+    if (data) {
+      makePage(data);
+    } else
+      document.getElementById(
+        "product-detail-wrapper"
+      ).innerHTML = ` <div class="h-[450px]">
         <p>Product with id ${urlParams.get("productId")} not found</p>
       </div>`;
     return;

@@ -1,3 +1,5 @@
+import { listOfProducts } from "./helper";
+
 export function sendNotification(type, text) {
   let notificationBox = document.querySelector(".notification-box");
   const alerts = {
@@ -26,6 +28,7 @@ export function sendNotification(type, text) {
       color: "green-500",
     },
   };
+
   let component = document.createElement("div");
   component.className = `relative flex items-center bg-${alerts[type].color} z-[100] text-white text-sm font-bold px-4 py-3 rounded-md opacity-0 transform transition-all duration-500 mb-1`;
   component.innerHTML = `${alerts[type].icon}<p>${text}</p>`;
@@ -50,10 +53,16 @@ export function sendNotification(type, text) {
   //If you can do something more elegant than timeouts, please do, but i can't
 }
 export const getData = async (cartItem) => {
+  let newData = [];
   const urls = [];
-  Object.keys(cartItem).forEach((item) =>
-    urls.push(fetch(`https://dummyjson.com/products/${item}`))
-  );
+  Object.keys(cartItem).forEach((item) => {
+    if (item <= 194) {
+      urls.push(fetch(`https://dummyjson.com/products/${item}`));
+    } else {
+      newData = listOfProducts();
+    }
+  });
+  console.log("urls: ", cartItem);
 
   const responses = await Promise.all(urls);
   let data = [];
@@ -62,5 +71,5 @@ export const getData = async (cartItem) => {
   }
   console.log(data);
 
-  return data;
+  return [...newData, ...data];
 };

@@ -159,7 +159,7 @@ const makeCartItem = async (data, cartItem) => {
   let html = `
   <div class="w-full h-[400px] flex flex-col gap-5 items-center justify-center">
       <h1 class="text-3xl">You don't have any product in your cart</h1>
-       <button class="w-1/2 lg:w-[30%]" id="go-to-home">Go to shopping</button>
+       <p class="w-1/2 lg:w-[30%] cursor-pointer text-[#406882]" id="go-to-home">Go to shopping</p>
   </div>
 `;
   if (productsInCart.length != 0) {

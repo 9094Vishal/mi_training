@@ -1,4 +1,9 @@
-import { setNavBar } from "./helper.js";
+import {
+  getcurrentUser,
+  getUserAccountType,
+  listOfProducts,
+  setNavBar,
+} from "./helper.js";
 import { isLogdedIn } from "./helper.js";
 import { moveToUp } from "./helper.js";
 import { debouncing } from "./helper.js";
@@ -26,69 +31,81 @@ let totalPages = 0;
 const pagination = document.getElementById("pagination");
 let priceRangeMin = rangeInput[0].value;
 let priceRangeMax = rangeInput[1].value;
+const loadPageData = () => {
+  if (products.length == 1) {
+    minProductPrice = 0;
+  } else
+    minProductPrice = products.reduce((accumulator, currentValue) => {
+      return Math.ceil(Math.min(accumulator, currentValue.price));
+    }, Infinity);
+
+  maxProductPrice = products.reduce((accumulator, currentValue) => {
+    return Math.floor(Math.max(accumulator, currentValue.price));
+  }, 0);
+  // Price range slider code...
+  let rangeMin = 100;
+
+  rangeInput[0].max = maxProductPrice;
+  rangeInput[1].max = maxProductPrice;
+  rangeInput[0].min = minProductPrice;
+  rangeInput[1].min = minProductPrice;
+  rangeInput[0].value = 0;
+  rangeInput[1].value = maxProductPrice;
+
+  rangePrice[0].innerHTML = "$" + minProductPrice;
+  rangePrice[1].innerHTML = "$" + maxProductPrice;
+
+  range.style.left = (0 / rangeInput[0].max) * 100 + "%";
+  range.style.right = 100 - (maxProductPrice / rangeInput[1].max) * 100 + "%";
+
+  priceRangeMin = rangeInput[0].value;
+  priceRangeMax = rangeInput[1].value;
+
+  rangeInput.forEach((input) => {
+    input.addEventListener("input", (e) => {
+      let minRange = parseInt(rangeInput[0].value);
+      let maxRange = parseInt(rangeInput[1].value);
+      if (maxRange - minRange < rangeMin) {
+        if (e.target.className === "min") {
+          rangeInput[0].value = maxRange - rangeMin;
+        } else {
+          rangeInput[1].value = minRange + rangeMin;
+        }
+      } else {
+        rangePrice[0].innerHTML = "$" + minRange;
+        rangePrice[1].innerHTML = "$" + maxRange;
+        range.style.left = (minRange / rangeInput[0].max) * 100 + "%";
+        range.style.right = 100 - (maxRange / rangeInput[1].max) * 100 + "%";
+      }
+      priceRangeMin = minRange;
+      priceRangeMax = maxRange;
+      inputValue(searchValue);
+    });
+  });
+
+  makeProductCard(currentPage);
+};
 const loadData = () => {
+  let data;
+
   const url = `https://dummyjson.com/products?limit=194`;
   const xhr = new XMLHttpRequest();
   xhr.open("GET", url, false);
   xhr.onreadystatechange = function () {
     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-      const data = JSON.parse(xhr.responseText);
-      console.log(data);
+      data = JSON.parse(xhr.responseText);
+      const newProducts = listOfProducts();
+      console.log("newProducts: ", newProducts);
+      if (newProducts) {
+        newProductList = [...newProducts, ...data.products];
+
+        products = [...data.products];
+      } else {
+        products = data.products;
+        newProductList = data.products;
+      }
       totalPages = Math.ceil(data.total / itemsPerPage);
-      products = data.products;
-      newProductList = data.products;
-      minProductPrice = products.reduce((accumulator, currentValue) => {
-        console.log("currentValue: ", currentValue);
-        return Math.ceil(Math.min(accumulator, currentValue.price));
-      }, Infinity);
-      console.log("minProductPrice: ", minProductPrice);
-      maxProductPrice = products.reduce((accumulator, currentValue) => {
-        return Math.floor(Math.max(accumulator, currentValue.price));
-      }, 0);
-      // Price range slider code...
-      let rangeMin = 100;
-
-      rangeInput[0].max = maxProductPrice;
-      rangeInput[1].max = maxProductPrice;
-      rangeInput[0].min = minProductPrice;
-      rangeInput[1].min = minProductPrice;
-      rangeInput[0].value = 0;
-      rangeInput[1].value = maxProductPrice;
-
-      rangePrice[0].innerHTML = "$" + minProductPrice;
-      rangePrice[1].innerHTML = "$" + maxProductPrice;
-
-      range.style.left = (0 / rangeInput[0].max) * 100 + "%";
-      range.style.right =
-        100 - (maxProductPrice / rangeInput[1].max) * 100 + "%";
-
-      priceRangeMin = rangeInput[0].value;
-      priceRangeMax = rangeInput[1].value;
-
-      rangeInput.forEach((input) => {
-        input.addEventListener("input", (e) => {
-          let minRange = parseInt(rangeInput[0].value);
-          let maxRange = parseInt(rangeInput[1].value);
-          if (maxRange - minRange < rangeMin) {
-            if (e.target.className === "min") {
-              rangeInput[0].value = maxRange - rangeMin;
-            } else {
-              rangeInput[1].value = minRange + rangeMin;
-            }
-          } else {
-            rangePrice[0].innerHTML = "$" + minRange;
-            rangePrice[1].innerHTML = "$" + maxRange;
-            range.style.left = (minRange / rangeInput[0].max) * 100 + "%";
-            range.style.right =
-              100 - (maxRange / rangeInput[1].max) * 100 + "%";
-          }
-          priceRangeMin = minRange;
-          priceRangeMax = maxRange;
-          inputValue(searchValue);
-        });
-      });
-
-      makeProductCard(currentPage);
+      loadPageData();
     }
   };
   xhr.send();
@@ -97,12 +114,13 @@ const makeProductCard = (page = 1) => {
   moveToUp();
   product.innerHTML = "";
   if (newProductList.length == 0) {
-    product.innerHTML = "Sorry, You have no order!!!";
+    product.innerHTML = "Sorry, No product found!!!";
   }
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
   const pageItems = newProductList.slice(startIndex, endIndex);
+  console.log("newProductList: ", newProductList);
 
   pageItems.map((item) => {
     const productCrad = document.createElement("div");
@@ -196,7 +214,7 @@ const makeProductCard = (page = 1) => {
               </div>
             ${
               item.stock != 0
-                ? `<button class="add-to-cart-btn w-1/2 self-center" data-product="${item.id}" >Add to cart</button>`
+                ? `<button class="add-to-cart-btn w-1/2 self-center" data-product="${item.id}" data-stock="${item.stock}" >Add to cart</button>`
                 : `<p class="text-center bg-[#406882] text-white w-1/2 rounded-md self-center">Out of stock</p>`
             } `;
 
@@ -236,8 +254,16 @@ const makeProductCard = (page = 1) => {
   document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
     button.onclick = function (e) {
       e.stopPropagation();
-      addToCart(this.dataset.product);
+      addToCart(this.dataset.product, this.dataset.stock);
       setNavBar();
+    };
+  });
+  document.querySelectorAll(".edit-btn").forEach((button) => {
+    button.onclick = function (e) {
+      e.stopPropagation();
+      const params = [];
+      params.push("productId=" + this.dataset.product);
+      location.href = "/src/storeManager/add-product.html?" + params.join("&");
     };
   });
   largeSlider();
@@ -456,6 +482,7 @@ const searchWithDebounce = (searchValue) => {
   //   categoryFilter == "All";
   // }
   newProductList = products;
+  console.log("products: ", products);
   newProductList = newProductList.filter(
     (item) => item.price >= priceRangeMin && item.price <= priceRangeMax
   );
@@ -486,31 +513,29 @@ const searchWithDebounce = (searchValue) => {
       );
     });
   }
-  // here
-  if (newProductList.length != 0) {
-    let priceRangeMin = newProductList.reduce((accumulator, currentValue) => {
-      console.log("currentValue: ", currentValue);
-      return Math.ceil(Math.min(accumulator, currentValue.price));
-    }, Infinity);
 
-    let priceRangeMax = newProductList.reduce((accumulator, currentValue) => {
-      return Math.floor(Math.max(accumulator, currentValue.price));
-    }, 0);
+  // if (newProductList.length != 0) {
+  //   let priceRangeMin = newProductList.reduce((accumulator, currentValue) => {
+  //     return Math.ceil(Math.min(accumulator, currentValue.price));
+  //   }, Infinity);
 
-    rangeInput[0].max = priceRangeMax;
-    rangeInput[1].max = priceRangeMax;
-    rangeInput[0].min = priceRangeMin;
-    rangeInput[1].min = priceRangeMin;
-    rangeInput[0].value = 0;
-    rangeInput[1].value = priceRangeMax;
+  //   let priceRangeMax = newProductList.reduce((accumulator, currentValue) => {
+  //     return Math.floor(Math.max(accumulator, currentValue.price));
+  //   }, 0);
 
-    rangePrice[0].innerHTML = "$" + priceRangeMin;
-    rangePrice[1].innerHTML = "$" + priceRangeMax;
+  //   rangeInput[0].max = priceRangeMax;
+  //   rangeInput[1].max = priceRangeMax;
+  //   rangeInput[0].min = priceRangeMin;
+  //   rangeInput[1].min = priceRangeMin;
+  //   rangeInput[0].value = 0;
+  //   rangeInput[1].value = priceRangeMax;
 
-    range.style.left = (0 / rangeInput[0].max) * 100 + "%";
-    range.style.right = 100 - (priceRangeMax / rangeInput[1].max) * 100 + "%";
-  }
-  console.log(newProductList);
+  //   rangePrice[0].innerHTML = "$" + priceRangeMin;
+  //   rangePrice[1].innerHTML = "$" + priceRangeMax;
+
+  //   range.style.left = (0 / rangeInput[0].max) * 100 + "%";
+  //   range.style.right = 100 - (priceRangeMax / rangeInput[1].max) * 100 + "%";
+  // }
 
   totalPages = Math.ceil(newProductList.length / itemsPerPage);
 

@@ -1,4 +1,4 @@
-import { getcurrentUser, setNavBar } from "./helper.js";
+import { getcurrentUser, listOfProducts, setNavBar } from "./helper.js";
 import { productsData } from "../mock/productData.js";
 document.addEventListener("DOMContentLoaded", () => {
   setNavBar(false);
@@ -23,7 +23,7 @@ const createOrderCard = async () => {
   let html = `
     <div class="w-full h-full flex flex-col gap-5 items-center justify-center">
         <h1 class="text-3xl">You don't have any orders</h1>
-         <button class="w-[25%]" id="go-to-home">Continue shopping</button>
+         <p class="w-[25%] bg-[#406882]" id="go-to-home">Continue shopping</p>
     </div>
   `;
   const orderCard = document.querySelector(".order-card-holder");
@@ -32,9 +32,14 @@ const createOrderCard = async () => {
     console.log("orderData: ", orderData);
     const urls = [];
 
-    orderData.forEach(({ date, lineItem, orderId, subTotalPrice }) => {
+    let newData = [];
+    orderData.forEach(({ lineItem }) => {
       const data = lineItem.forEach(({ id }) => {
-        urls.push(fetch(`https://dummyjson.com/products/${id}`));
+        if (id <= 194) {
+          urls.push(fetch(`https://dummyjson.com/products/${id}`));
+        } else {
+          newData = listOfProducts();
+        }
       });
     });
     const responses = await Promise.all(urls);
@@ -44,13 +49,20 @@ const createOrderCard = async () => {
     }
 
     orders = orderData.map(({ date, lineItem, orderId, subTotalPrice }) => {
+      console.log(lineItem);
+
       const data = lineItem.map((subItem) => {
-        const data = respons.find((item) => item.id == subItem.id);
+        let data;
+        if (subItem.id >= 194) {
+          data = newData.find((item) => item.id == subItem.id);
+        } else data = respons.find((item) => item.id == subItem.id);
+
         return { ...data, orderDate: subItem.date };
       });
 
       return { data, date, orderId, subTotalPrice };
     });
+    console.log(orders);
 
     html = orders
       .map(({ data, date, orderId, subTotalPrice }) => {
@@ -87,13 +99,21 @@ const createOrderCard = async () => {
                 .map(({ title, price, orderData, images, id }) => {
                   return `  <div class="product-details flex gap-5">
                   <img class="w-[100px] h-[100px] object-contain"
-                    src="${images[0]}"
+                    src="${
+                      images
+                        ? images[0]
+                        : "https://www.pharmacybazar.in/assets/img/No_Product_Found.png"
+                    }"
                     alt=""
                   />
                   <div class="details w-full flex flex-col sm:flex-row sm:justify-between sm:items-center">
-                  <div>
-                    <div class="title text-xl sm:text-2xl text-[#1A374D] font-medium">${title}</div>
-                    <div class="price text-xl sm:text-2xl font-medium">$${price}</div>
+                  <div class="flex-1">
+                    <div class="title text-xl sm:text-2xl text-[#1A374D] font-medium">${
+                      title ?? "Product Now availiable"
+                    }</div>
+                    <div class="price text-xl sm:text-2xl font-medium">${
+                      price ? "$" + price : ""
+                    }</div>
                   </div>
                    
                       <button class="view-product w-fit p-[10px] rounded-2xl

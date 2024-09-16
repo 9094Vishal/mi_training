@@ -62,7 +62,7 @@ document.getElementById("login-form").addEventListener("submit", (e) => {
           })
         );
         user.accountType === "storeManager"
-          ? (window.location = "/src/dashbord/")
+          ? (window.location = "/src/storeManager/dash-board.html")
           : (window.location = "/src/storeManager/");
       } else {
         localStorage.setItem(
