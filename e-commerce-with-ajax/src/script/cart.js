@@ -120,7 +120,7 @@ const makeCartItem = async (data, cartItem) => {
   <div class="bg-[#406882] text-white p-[1%] mb-2 rounded">
     <h2 class="text-center "> Your Order</h2>
   </div>
-  <div class="content">
+  <div class="content h-[350px] overflow-y-scroll">
     <table class="w-full border" >
       <tr class="text-center">
         <th>Image</th>
@@ -184,7 +184,7 @@ const SponsoredItems = () => {
   const element = document.getElementsByClassName("ads-card")[0];
   const sponsoredItem = productsData.slice(3, 8);
 
-  const html = sponsoredItem.map(({ id, title, images, price }) => {
+  const html = sponsoredItem.map(({ id, title, images, price, stock }) => {
     return `
              <div class="items flex gap-2">
                 <img
@@ -194,7 +194,7 @@ const SponsoredItems = () => {
                 <div class="ads-item-wrapper">
                   <div class="item-title">${title}</div>
                   <div class="item-price">$${price}</div>
-                  <button class="add-to-ads-cart w-fit p-2" value="${id}">Add to cart</button>
+                  <button class="add-to-ads-cart w-fit p-2" name="${stock}" value="${id}">Add to cart</button>
                 </div>
               </div>
   `;
@@ -206,7 +206,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const cartItem = getCartItems();
   let data = [];
   if (cartItem) data = await getData(cartItem);
-  console.log("data: ", data);
 
   setNavBar(false);
   makeCartItem(data, cartItem);
@@ -214,7 +213,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.querySelectorAll(".add-to-ads-cart").forEach((button) => {
     button.addEventListener("click", (e) => {
-      addToCart(e.target.value);
+      addToCart(e.target.value, e.target.name);
       location = "/src/cart.html";
     });
   });

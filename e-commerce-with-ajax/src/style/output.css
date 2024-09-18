@@ -624,16 +624,8 @@ video {
   right: 0.5rem;
 }
 
-.right-\[10px\] {
-  right: 10px;
-}
-
 .right-\[6px\] {
   right: 6px;
-}
-
-.right-\[9px\] {
-  right: 9px;
 }
 
 .top-0 {
@@ -644,12 +636,24 @@ video {
   top: 2.5rem;
 }
 
-.top-\[-12px\] {
-  top: -12px;
-}
-
 .top-\[-1px\] {
   top: -1px;
+}
+
+.top-\[6px\] {
+  top: 6px;
+}
+
+.right-\[10px\] {
+  right: 10px;
+}
+
+.right-\[9px\] {
+  right: 9px;
+}
+
+.top-\[-12px\] {
+  top: -12px;
 }
 
 .top-\[-5px\] {
@@ -658,10 +662,6 @@ video {
 
 .top-\[-7px\] {
   top: -7px;
-}
-
-.top-\[6px\] {
-  top: 6px;
 }
 
 .z-10 {
@@ -851,20 +851,12 @@ video {
   height: 400px;
 }
 
-.h-\[42px\] {
-  height: 42px;
-}
-
 .h-\[450px\] {
   height: 450px;
 }
 
 .h-\[5px\] {
   height: 5px;
-}
-
-.h-\[67px\] {
-  height: 67px;
 }
 
 .h-fit {
@@ -878,6 +870,30 @@ video {
 
 .h-screen {
   height: 100vh;
+}
+
+.h-\[90\%\] {
+  height: 90%;
+}
+
+.h-\[calc\(100vh-10\%\)\] {
+  height: calc(100vh - 10%);
+}
+
+.h-\[100\%\] {
+  height: 100%;
+}
+
+.h-svh {
+  height: 100svh;
+}
+
+.h-\[350px\] {
+  height: 350px;
+}
+
+.h-\[42px\] {
+  height: 42px;
 }
 
 .w-1\/2 {
@@ -936,10 +952,6 @@ video {
   width: 30px;
 }
 
-.w-\[35px\] {
-  width: 35px;
-}
-
 .w-\[6rem\] {
   width: 6rem;
 }
@@ -959,6 +971,10 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-\[35px\] {
+  width: 35px;
 }
 
 .min-w-full {
@@ -1064,6 +1080,10 @@ video {
 
 .overflow-hidden {
   overflow: hidden;
+}
+
+.overflow-y-scroll {
+  overflow-y: scroll;
 }
 
 .rounded {
@@ -1233,6 +1253,11 @@ video {
 .object-contain {
   -o-object-fit: contain;
      object-fit: contain;
+}
+
+.object-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .p-1 {
@@ -1633,10 +1658,6 @@ video {
   background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 
-.hover\:font-semibold:hover {
-  font-weight: 600;
-}
-
 .hover\:\!text-white:hover {
   --tw-text-opacity: 1 !important;
   color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
@@ -1762,10 +1783,6 @@ video {
 
   .md\:grid {
     display: grid;
-  }
-
-  .md\:hidden {
-    display: none;
   }
 
   .md\:h-36 {

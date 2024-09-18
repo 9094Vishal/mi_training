@@ -1,14 +1,10 @@
 import { getcurrentUser, listOfProducts, setNavBar } from "./helper.js";
 import { productsData } from "../mock/productData.js";
+import { sendNotification } from "./customNotification.js";
 document.addEventListener("DOMContentLoaded", () => {
   setNavBar(false);
   createOrderCard();
 
-  document.querySelectorAll(".view-product").forEach((button) => {
-    button.addEventListener("click", (e) => {
-      location = `/src/productDetail.html?productId=${e.target.value}`;
-    });
-  });
   if (document.getElementById("go-to-home"))
     document.getElementById("go-to-home").addEventListener("click", (e) => {
       location = `/src/`;
@@ -29,7 +25,6 @@ const createOrderCard = async () => {
   const orderCard = document.querySelector(".order-card-holder");
 
   if (orderData) {
-    console.log("orderData: ", orderData);
     const urls = [];
 
     let newData = [];
@@ -49,8 +44,6 @@ const createOrderCard = async () => {
     }
 
     orders = orderData.map(({ date, lineItem, orderId, subTotalPrice }) => {
-      console.log(lineItem);
-
       const data = lineItem.map((subItem) => {
         let data;
         if (subItem.id >= 194) {
@@ -62,7 +55,6 @@ const createOrderCard = async () => {
 
       return { data, date, orderId, subTotalPrice };
     });
-    console.log(orders);
 
     html = orders
       .map(({ data, date, orderId, subTotalPrice }) => {
@@ -117,7 +109,7 @@ const createOrderCard = async () => {
                   </div>
                    
                       <button class="view-product w-fit p-[10px] rounded-2xl
-                      " value="${id}">View product</button>
+                      " value="${id ?? ""}">View product</button>
                    
                   </div>
                 </div>`;
@@ -136,4 +128,14 @@ const createOrderCard = async () => {
     orderCard.classList.add("w-full");
   }
   orderCard.innerHTML = html;
+  if (orderData)
+    document.querySelectorAll(".view-product").forEach((button) => {
+      button.addEventListener("click", (e) => {
+        if (e.target.value) {
+          location = `/src/productDetail.html?productId=${e.target.value}`;
+        } else {
+          sendNotification("error", "This product is not available");
+        }
+      });
+    });
 };

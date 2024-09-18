@@ -22,6 +22,7 @@ export const setNavBar = (isSearchNeeded = true) => {
   navbar[0].setAttribute("x-data", "{ isOpen: false }");
 
   const searchBar = ` <div class="flex w-3/4 h-[35px] ">
+   
   <div class="relative "><select class="appearance-none h-full rounded-l-lg text-[#1A374D] font-medium text-[10px] 
   sm:text-base bg-gray-200 p-1 border-none outline-none w-fit" name="category" id="filter-menu"" name="count"
    id="cart-quntity"></select> 
@@ -38,8 +39,23 @@ export const setNavBar = (isSearchNeeded = true) => {
         </div>
       </div>`;
   const navbarItem = `<a href="/src/"><h1 class="text-[12px] text-[#fff] md:text-2xl cursor-pointer" id="logo">MI Store</h1></a>
-  ${isSearchNeeded ? searchBar : ""}  
+  ${isSearchNeeded ? searchBar : ""}
+ 
+  <div class="flex items-center gap-3">
+  <a class="relative hover:opacity-50 text-black w-[35px] h-[42px] " href="/src/cart.html"
+          ><img class="invert h-full w-full" src="/public/images/cart.png" alt="" />
+          <p class="cart-count  text-[#fff] absolute m-0   font-semibold  ${
+            totalCartItem.toString().length >= 3
+              ? "text-xs top-[-5px] right-[6px]"
+              : totalCartItem.toString().length > 1
+              ? "text-sm top-[-7px] right-[9px]"
+              : "text-lg top-[-12px] right-[10px]"
+          }  p-1">${
+    totalCartItem.toString().length >= 3 ? "99+" : totalCartItem
+  }</p>
+        </a> 
    <div class="">
+   
       <button class="w-fit" id="user-menu" aria-label="User menu" aria-haspopup="true">
         <img
           class="w-8 h-8 rounded-full"
@@ -114,7 +130,7 @@ export const setNavBar = (isSearchNeeded = true) => {
         
         </div>
       </div>
-    </div>
+    </div></div>
  <div class="hidden text-white font-bold cursor-pointer" id="hamburger-menu-icon">&#9776</div>
       `;
 
@@ -255,15 +271,6 @@ export const addToCart = async (id, quntity = null) => {
     sendNotification("success", "Product added in your cart...");
   }
   localStorage.setItem(user.toString(), JSON.stringify(userData));
-  //   }
-  // };
-
-  // request.open("GET", `https://dummyjson.com/products/${id}`, true);
-  // try {
-  //   request.send();
-  // } catch (error) {
-  //   console.log("error: ", error);
-  // }
 };
 
 export const getCartItems = () => {

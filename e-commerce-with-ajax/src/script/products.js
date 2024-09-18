@@ -95,16 +95,15 @@ const loadData = () => {
     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
       data = JSON.parse(xhr.responseText);
       const newProducts = listOfProducts();
-      console.log("newProducts: ", newProducts);
       if (newProducts) {
-        newProductList = [...newProducts, ...data.products];
-
-        products = [...data.products];
+        newProductList = [...newProducts.reverse(), ...data.products];
+        products = [...newProducts.reverse(), ...data.products];
+        totalPages = Math.ceil(data.total + newProducts.length / itemsPerPage);
       } else {
         products = data.products;
         newProductList = data.products;
+        totalPages = Math.ceil(data.total / itemsPerPage);
       }
-      totalPages = Math.ceil(data.total / itemsPerPage);
       loadPageData();
     }
   };
@@ -120,7 +119,6 @@ const makeProductCard = (page = 1) => {
   const endIndex = startIndex + itemsPerPage;
 
   const pageItems = newProductList.slice(startIndex, endIndex);
-  console.log("newProductList: ", newProductList);
 
   pageItems.map((item) => {
     const productCrad = document.createElement("div");
@@ -478,11 +476,8 @@ document.addEventListener("DOMContentLoaded", function () {
 // search with debouncing
 const searchWithDebounce = (searchValue) => {
   categoryFilter = document.getElementById("filter-menu").value;
-  // if (searchValue.trim() === "") {
-  //   categoryFilter == "All";
-  // }
+
   newProductList = products;
-  console.log("products: ", products);
   newProductList = newProductList.filter(
     (item) => item.price >= priceRangeMin && item.price <= priceRangeMax
   );

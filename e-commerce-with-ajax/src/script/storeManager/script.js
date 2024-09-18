@@ -42,7 +42,6 @@ const makeProductCard = (page = 1) => {
   const endIndex = startIndex + itemsPerPage;
 
   const pageItems = newProductList.slice(startIndex, endIndex);
-  console.log("newProductList: ", newProductList);
 
   pageItems.map((item) => {
     const productCrad = document.createElement("div");
@@ -131,7 +130,6 @@ const makeProductCard = (page = 1) => {
       const products = listOfProducts().filter(
         (item) => item.id != this.dataset.product
       );
-      console.log(products);
 
       localStorage.setItem("products", JSON.stringify(products));
       const userData = JSON.parse(

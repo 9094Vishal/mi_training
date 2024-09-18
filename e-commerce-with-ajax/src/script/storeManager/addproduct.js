@@ -44,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
     returnPolicy.value = myProducts.returnPolicy;
     imageWrapper.parentElement.classList.remove("hidden");
     imageWrapper.parentElement.classList.add("flex");
-    console.log(myProducts.images);
 
     myProducts.images.map((image) => {
       const div = document.createElement("div");
@@ -262,7 +261,6 @@ document.addEventListener("DOMContentLoaded", () => {
           images: images,
           shippingInformation: "Ships in 1 month",
         };
-        console.log(productData);
 
         if (myProducts) {
           editProduct(productData, myProducts.id);
@@ -365,7 +363,6 @@ const addProduct = (productData, productId) => {
   };
 };
 const editProduct = (productData, id) => {
-  console.log("productData: ", id);
   let allUserProduct = listOfProducts();
 
   allUserProduct = allUserProduct.map((item, index) =>
@@ -373,7 +370,6 @@ const editProduct = (productData, id) => {
       ? { ...allUserProduct[index][id], ...productData }
       : { ...item }
   );
-  console.log("allUserProduct: ", allUserProduct);
   localStorage.setItem("products", JSON.stringify(allUserProduct));
   location = "/src/storeManager/dash-board.html";
 };
