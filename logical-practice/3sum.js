@@ -5,18 +5,37 @@
  * @param {number[]} nums
  * @return {number[][]}
  */
-var threeSum = function (nums) {
-  const result = [];
-  for (let i = 0; i < nums.length; i++) {
-    for (let j = 0; j < nums.length; j++) {
-      for (let k = 0; k < nums.length; k++) {
-        if (i != j && i != k && j != k)
-          if (nums[i] + nums[j] + nums[k] === 0) {
-            result.push([nums[i], nums[j], nums[k]].sort());
-          }
-      }
-    }
-  }
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var threeSum = function(nums) {
+    const res = [];
+    nums.sort((a,b)=>a-b)
 
-  return [...new Set(result.map(JSON.stringify))].map(JSON.parse);
+    for (let i = 0; i < nums.length; i++) {
+         if(i>0 && nums[i] == nums[i-1]){
+            continue;
+        }
+        let left=i+1;
+        let right = nums.length-1;
+
+        while(left<right){
+            let threesum = nums[i]+nums[left]+nums[right]
+            if(threesum>0){
+                right--;
+            }else if(threesum<0){
+                left++;
+            }else{
+                res.push([nums[i],nums[left],nums[right]])
+                left++;
+
+                while(nums[left] == nums[left-1] && left<right){
+                    left++;
+                }
+            }
+        }
+    }
+
+    return res
 };
