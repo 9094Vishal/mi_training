@@ -15,13 +15,28 @@ export const getDurartion = (d) => {
 };
 
 export const isLogedIn = () => {
-  const user = localStorage.getItem("user");
+  const user = localStorage.getItem("isLogIn");
   if (user) {
     return true;
   }
   return false;
 };
 
+export const loadNavBar = () => {
+  const header = document.querySelector("header");
+  header.setAttribute("class", "px-14 py-2 bg-[#09203C] text-white");
+  const mainHeader = getNavigationBar();
+  header.innerHTML = mainHeader;
+};
+export const getListeners = () => {
+  if (!isLogedIn()) {
+    return [
+      document.getElementById("login-btn"),
+      document.getElementById("signup-btn"),
+    ];
+  }
+  return [document.getElementById("logout")];
+};
 export const loadHeaderWithBookFunctions = () => {
   const header = document.querySelector("header");
   header.setAttribute("class", "px-14 py-10 bg-[#09203C] text-white");
@@ -170,19 +185,33 @@ export const getNavigationBar = () => {
 
               <!-- primary nav -->
               <div class="hidden md:flex items-center space-x-1">
-                <a href="#" class="py-5 px-3hover:text-gray-200">History</a>
+                <a href="/src/history.html" class="py-5 px-3hover:text-gray-200">History</a>
               </div>
             </div>
 
             <!-- secondary nav -->
-            <div class="hidden md:flex items-center space-x-1">
-              <a href="" class="py-5 px-3">Login</a>
-              <a
-                href=""
+            ${
+              !isLogedIn()
+                ? `  <div class="hidden md:flex items-center space-x-1">
+              <button value="login" id="login-btn" class="py-5 px-3">Login</button>
+              <Button
+                id="signup-btn"
+                value="signup"
                 class="py-2 px-3 bg-yellow-400 hover:bg-yellow-300 text-yellow-900 hover:text-yellow-800 rounded transition duration-300"
-                >Signup</a
+                >Signup</Button
               >
-            </div>
+            </div>`
+                : `  <div class="hidden md:flex items-center space-x-1">
+            
+              <Button
+                id="logout"
+                value="logout"
+                class="py-2 px-3 bg-yellow-400 hover:bg-yellow-300 text-yellow-900 hover:text-yellow-800 rounded transition duration-300"
+                >Log out</Button
+              >
+            </div>`
+            }
+          
 
             <!-- mobile button goes here -->
             <div class="md:hidden flex items-center">
@@ -424,4 +453,409 @@ export const getBookFunctions = () => {
         </div>
       </div>
   `;
+};
+
+export const loadOtpPop = (
+  userOtp,
+  callBack,
+  id,
+  phone,
+  userName,
+  isCallBackNeeded = false,
+  islogin = false
+) => {
+  let otp = userOtp;
+  document.getElementById("otp-wrapper").innerHTML = `
+  <div
+        class="max-w-lg p-8 sm:pb-4 bg-white rounded shadow-lg text-center sm:text-left"
+      >
+        <h3
+          class="text-xl w-full sm:text-2xl font-semibold mb-6 flex flex-col sm:flex-row items-center"
+        >
+          <div
+            class="p-2 rounded-full w-full flex items-center justify-between mb-4 sm:mb-0 sm:mr-2"
+          >
+            <div class="flex items-center">
+              <svg
+                class="h-10 w-10 mr-1 text-blue-400"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                />
+              </svg>
+              <span class="font-bold">Mi Book</span>
+            </div>
+            <span class="hover:opacity-40 cursor-pointer close-otp-popup">
+              X
+            </span>
+          </div>
+        </h3>
+        <form class="space-y-6" id="otp-form">
+          <div id="otp-wrapper" class="">
+            <div class="flex items-center justify-between">
+              <label
+                for="otp"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >Otp</label
+              >
+            </div>
+            <div class="mt-2">
+              <input
+                id="otp"
+                name="otp"
+                type="otp"
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
+              />
+            </div>
+            <p class="text-red-500" id="otp-error"></p>
+            <label
+              id="resend"
+              class="mt-2 cursor-pointer block text-sm font-medium leading-6 text-gray-900"
+              >Resend otp</label
+            >
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Login
+            </button>
+          </div>
+        </form>
+        <div
+          class="mt-8 pt-8 sm:pt-4 border-t -mx-8 px-8 flex flex-col sm:flex-row justify-end leading-relaxed"
+        ></div>
+      </div>
+  `;
+  const otpInput = document.getElementById("otp");
+  const otpError = document.getElementById("otp-error");
+  document.getElementById("otp-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (validateNumber(otpInput.value.toString(), otpError, 6)) {
+      console.log(otp);
+
+      if (otpInput.value.toString() == otp) {
+        const users = getListOfUsers();
+        if (isCallBackNeeded) {
+          const data = {
+            username: userName.value,
+            phone: phone.value,
+          };
+          localStorage.setItem("currentUser", JSON.stringify(data));
+          localStorage.setItem("users", JSON.stringify(data));
+          // localStorage.setItem("isLogIn", true);
+          callBack(id, data);
+          document.querySelector(".flight-popup").classList.remove("hidden");
+        } else if (islogin) {
+          const user = users.find((item) => item.phone == phone.value);
+          localStorage.setItem("currentUser", JSON.stringify(user));
+          localStorage.setItem("isLogIn", true);
+          location.reload();
+        } else {
+          const data = {
+            username: userName.value,
+            phone: phone.value,
+          };
+          users.push(data);
+          localStorage.setItem("currentUser", JSON.stringify(data));
+          localStorage.setItem("users", JSON.stringify(users));
+          localStorage.setItem("isLogIn", true);
+          location.reload();
+        }
+        closeOtpPopup();
+      } else {
+        otpError.innerHTML = "Invalid otp";
+      }
+    }
+  });
+  document.getElementById("resend").onclick = () => {
+    otp = sendOtp();
+  };
+  function closeOtpPopup() {
+    document.querySelector(".otp-popup").classList.add("hidden");
+  }
+
+  document
+    .querySelector(".close-otp-popup")
+    .addEventListener("click", closeOtpPopup);
+  otpInput.addEventListener("input", () => {
+    validateNumber(otpInput.value.toString(), otpError, 6);
+  });
+  document.querySelector(".otp-popup").classList.remove("hidden");
+};
+export const loadPhoneNUmberPopUp = (cb, id, needCb = false) => {
+  document.getElementById("user-phone").innerHTML = `
+  <div
+        class="max-w-lg p-8 sm:pb-4 bg-white rounded shadow-lg text-center sm:text-left"
+      >
+        <h3
+          class="text-xl w-full sm:text-2xl font-semibold mb-6 flex flex-col sm:flex-row items-center"
+        >
+          <div
+            class="p-2 rounded-full w-full flex items-center justify-between mb-4 sm:mb-0 sm:mr-2"
+          >
+            <div class="flex items-center">
+              <svg
+                class="h-10 w-10 mr-1 text-blue-400"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                />
+              </svg>
+              <span class="font-bold">Mi Book</span>
+            </div>
+            <span class="hover:opacity-40 cursor-pointer close-treact-popup">
+              X
+            </span>
+          </div>
+        </h3>
+        <form class="space-y-6" id="login-form">
+          <div>
+            <label
+              for="user-name"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >user Name</label
+            >
+            <div class="mt-2">
+              <input
+                id="user-name"
+                name="name"
+                type="text"
+                class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+                <p class="text-red-500" id="name-error"></p>
+                
+          </div>
+          <div>
+            <label
+              for="phone"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >Phone Numebr</label
+            >
+            <div class="mt-2">
+              <input
+                id="phone"
+                name="phone"
+                type="number"
+                class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+            <p class="text-red-500" id="phone-error"></p>
+              <span class='hidden text-[#09203C] cursor-pointer login' >Log in</span>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Get-otp
+            </button>
+          </div>
+        </form>
+        <div
+          class="mt-8 pt-8 sm:pt-4 border-t -mx-8 px-8 flex flex-col sm:flex-row justify-end leading-relaxed"
+        ></div>
+      </div>
+  `;
+  const phone = document.getElementById("phone");
+  const userName = document.getElementById("user-name");
+  const nameError = document.getElementById("name-error");
+  const phoneError = document.getElementById("phone-error");
+  const signup = document.querySelector(".login");
+  phone.addEventListener("input", () => {
+    validateNumber(phone.value.toString(), phoneError, 10);
+  });
+  document.getElementById("login-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (userName.value === "") {
+      nameError.innerHTML = "This field is required!!";
+      return;
+    } else {
+      nameError.innerHTML = "";
+    }
+    if (validateNumber(phone.value.toString(), phoneError, 10)) {
+      const users = getListOfUsers();
+      const user = users.find((item) => item.phone == phone.value);
+
+      if (user) {
+        phoneError.innerHTML = "Your phone number is not exist";
+        signup.classList.remove("hidden");
+      } else {
+        closeTreactPopup();
+        loadOtpPop(sendOtp(), cb, id, phone, userName, needCb);
+      }
+    }
+  });
+  function closeTreactPopup() {
+    document.querySelector(".treact-popup").classList.add("hidden");
+  }
+  signup.addEventListener("click", () => {
+    closeTreactPopup();
+    openLoginPopUp();
+  });
+  document.querySelector(".treact-popup").classList.remove("hidden");
+
+  document
+    .querySelector(".close-treact-popup")
+    .addEventListener("click", closeTreactPopup);
+};
+
+export const openLoginPopUp = () => {
+  document.getElementById("user-login-phone").innerHTML = `
+  <div
+        class="max-w-lg p-8 sm:pb-4 bg-white rounded shadow-lg text-center sm:text-left"
+      >
+        <h3
+          class="text-xl w-full sm:text-2xl font-semibold mb-6 flex flex-col sm:flex-row items-center"
+        >
+          <div
+            class="p-2 rounded-full w-full flex items-center justify-between mb-4 sm:mb-0 sm:mr-2"
+          >
+            <div class="flex items-center">
+              <svg
+                class="h-10 w-10 mr-1 text-blue-400"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                />
+              </svg>
+              <span class="font-bold">Mi Book</span>
+            </div>
+            <span class="hover:opacity-40 cursor-pointer close-login-popup">
+              X
+            </span>
+          </div>
+        </h3>
+        <form class="space-y-6" id="user-login-form">
+       
+          <div>
+            <label
+              for="phone-number"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >Phone Numebr</label
+            >
+            <div class="mt-2">
+              <input
+                id="phone-number"
+                name="phone"
+                type="number"
+                class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+            <p class="text-red-500" id="phone-number-error"></p>
+            <span class='hidden text-[#09203C] cursor-pointer signup' >Sign up</span>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Get-otp
+            </button>
+          </div>
+        </form>
+        <div
+          class="mt-8 pt-8 sm:pt-4 border-t -mx-8 px-8 flex flex-col sm:flex-row justify-end leading-relaxed"
+        ></div>
+      </div>
+  `;
+  const signup = document.querySelector(".signup");
+  const number = document.getElementById("phone-number");
+  const numberError = document.getElementById("phone-number-error");
+  document.getElementById("user-login-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (validateNumber(number.value.toString(), numberError, 10)) {
+      const users = getListOfUsers();
+      console.log("users: ", users, number.value);
+      const user = users.find((item) => item.phone == number.value);
+
+      if (user) {
+        closeLogin();
+        loadOtpPop(sendOtp(), () => {}, 1, number, null, false, true);
+      } else {
+        numberError.innerHTML = "Your phone number is not exist";
+        signup.classList.remove("hidden");
+      }
+    }
+  });
+
+  signup.addEventListener("click", () => {
+    closeLogin();
+    loadPhoneNUmberPopUp();
+  });
+  function closeLogin() {
+    document.querySelector(".login-popup").classList.add("hidden");
+  }
+
+  document.querySelector(".login-popup").classList.remove("hidden");
+
+  document
+    .querySelector(".close-login-popup")
+    .addEventListener("click", closeLogin);
+};
+export const validateNumber = (number, error, digits) => {
+  if (number === "") {
+    error.innerHTML = "This field is required!!";
+    return false;
+  }
+  if (number.length >= 0 && number.length < digits) {
+    error.innerHTML = `${
+      number == 10 ? "Number" : "Otp"
+    } must be ${digits} digits`;
+    return false;
+  } else {
+    error.innerHTML = "";
+    return true;
+  }
+};
+export const sendOtp = () => {
+  const userOtp = Math.floor(100000 + Math.random() * 900000);
+
+  console.log("otp: ", userOtp);
+  return userOtp;
+};
+export const getListOfUsers = () => {
+  const users = JSON.parse(localStorage.getItem("users"));
+  if (users) {
+    return users;
+  } else {
+    localStorage.setItem("users", JSON.stringify([]));
+    return [];
+  }
+};
+export const getLogedInUser = () => {
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+  const users = JSON.parse(localStorage.getItem("users"));
+  if (users) {
+    return users.find((item) => item.phone == user.phone);
+  } else {
+    localStorage.setItem("users", JSON.stringify([]));
+    return {};
+  }
 };

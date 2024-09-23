@@ -290,7 +290,7 @@ export const flights = [
     flightNumber: "FL120",
     airline: "GoAir",
     departureCity: "Delhi",
-    arrivalCity: "Lucknow",
+    arrivalCity: "Goa",
     departureTime: "2024-10-11T07:00:00",
     arrivalTime: "2024-10-11T08:00:00",
     seatsAvailable: 110,

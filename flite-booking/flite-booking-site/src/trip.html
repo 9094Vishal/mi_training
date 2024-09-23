@@ -6,7 +6,10 @@
     <link rel="stylesheet" href="./output.css" />
     <title>Document</title>
   </head>
-  <body>
+  <body class="relative">
+    <div
+      class="notification-box flex flex-col items-center top-0 right-0 fixed w-full z-50 p-3"
+    ></div>
     <header></header>
     <section>
       <div class=""></div>
@@ -56,6 +59,27 @@
         </div>
       </div>
     </section>
+
+    <div
+      id="book-popup"
+      class="REMOVE-THIS-ELEMENT-IF-YOU-ARE-USING-THIS-PAGE hidden flight-popup fixed z-20 inset-0 flex items-center justify-center"
+      style="background-color: rgba(0, 0, 0, 0.3)"
+    ></div>
+    <div
+      id="user-login-phone"
+      class="REMOVE-THIS-ELEMENT-IF-YOU-ARE-USING-THIS-PAGE hidden login-popup fixed z-20 inset-0 flex items-center justify-center"
+      style="background-color: rgba(0, 0, 0, 0.3)"
+    ></div>
+    <div
+      id="user-phone"
+      class="REMOVE-THIS-ELEMENT-IF-YOU-ARE-USING-THIS-PAGE hidden treact-popup fixed z-20 inset-0 flex items-center justify-center"
+      style="background-color: rgba(0, 0, 0, 0.3)"
+    ></div>
+    <div
+      id="otp-wrapper"
+      class="REMOVE-THIS-ELEMENT-IF-YOU-ARE-USING-THIS-PAGE hidden otp-popup fixed z-20 inset-0 flex items-center justify-center"
+      style="background-color: rgba(0, 0, 0, 0.3)"
+    ></div>
     <script type="module" src="./js/trip.js"></script>
   </body>
 </html>
