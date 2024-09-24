@@ -1,4 +1,10 @@
-import { getDurartion, getLogedInUser, getTime, loadNavBar } from "./helper.js";
+import {
+  getDurartion,
+  getLogedInUser,
+  getTime,
+  loadNavBar,
+  sendOtp,
+} from "./helper.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   loadNavBar();
@@ -13,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
 const createOrderCard = async () => {
   const user = getLogedInUser();
   const history = user.history;
-  console.log("history: ", history);
 
   let html = `
     <div class="w-full h-full text-center flex flex-col gap-5 items-center justify-center">
@@ -38,6 +43,7 @@ const createOrderCard = async () => {
           estimatedTravelTime,
           flightNumber,
         } = flightData;
+
         return `
          <div class=" border border-[#a0a0a0] rounded-lg">
             <div class="order-card-top rounded-t-lg p-[10px] bg-[#e5e4e2] sm:flex sm:justify-between">
@@ -48,7 +54,7 @@ const createOrderCard = async () => {
                 </div>
                 <div class="top-detail flex flex-col">
                   <span>TOTAL</span>
-                  <span>${total}</span>
+                  <span>&#8377; ${total.toFixed(2)}</span>
                 </div>
                 <div class="top-detail flex flex-col">
                   <span>Traveller</span>
@@ -58,7 +64,7 @@ const createOrderCard = async () => {
               
               <div class="top-right flex flex-col">
                 <div class="top-detail flex sm:items-end flex-col">
-                  <span>Flight #${time}</span>
+                  <span>Flight #${sendOtp()}</span>
                
                 </div>
               </div>

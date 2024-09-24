@@ -1,56 +1,87 @@
+import { airLines } from "../mock/airlinis.js";
 import { flights } from "../mock/flightsData.js";
 import { sendNotification } from "./customNotification.js";
 import {
+  convertDate,
   getDurartion,
   getListeners,
   getListOfUsers,
+  getLogedInUser,
   getTime,
   isLogedIn,
   loadHeaderWithBookFunctions,
-  loadOtpPop,
   loadPhoneNUmberPopUp,
-  openLoginPopUp,
-  sendOtp,
-  validateNumber,
 } from "./helper.js";
 
 let userOtp = "";
+let price = null;
+const airlines = document.getElementById("airlines");
+const range = document.getElementById("range");
+const setAirlinesFilter = () => {
+  airlines.innerHTML = airLines
+    .map(
+      (item, id) =>
+        `
+            <div>
+              <input type="checkbox" class="airlines  name="airlines" value="${item}" id="air-${id}" />
+              <label class="hover:text-gray-600"" for="air-${id}">${item}</label>
+            </div>
+    `
+    )
+    .join("");
+};
+let selectedAirLines = [];
 document.addEventListener("DOMContentLoaded", () => {
   loadHeaderWithBookFunctions();
-  const listeners = getListeners();
-
-  if (listeners.length != 0)
-    listeners.forEach(
-      (item) =>
-        (item.onclick = () => {
-          if (item.value == "login") {
-            openLoginPopUp();
-          } else if (item.value == "signup") {
-            loadPhoneNUmberPopUp();
-          } else {
-            localStorage.removeItem("isLogIn");
-            localStorage.removeItem("currentUser");
-            window.location.reload();
-          }
-        })
-    );
+  getListeners();
+  setAirlinesFilter();
 
   const fliterWrapper = document.getElementById("flight-wraper");
+  const x = document.getElementsByTagName("BODY")[0]; // Select body tag because of disable scroll when modal is active
+  const modal = document.getElementById("modal"); // modal
+  const modalBtn = document.getElementById("modal-button"); // launch modal button
+  const modalClose = document.getElementsByClassName("modal-close"); // close modal button
 
   let params = new URLSearchParams(location.search);
   let totalAdults = params.get("adults");
   let TotalChilds = params.get("childs");
   const totalTravelers = Number(totalAdults) + Number(TotalChilds);
+
   const makeCards = () => {
+    let params = new URLSearchParams(location.search);
     let from = params.get("from");
     let to = params.get("to");
     let startDate = params.get("depart");
-    let returnDate = params.get("return");
 
-    const availableFlights = flights.filter(
-      (item) => item.arrivalCity == to && item.departureCity == from
-    );
-    if (availableFlights) {
+    let availableFlights = flights.filter((item) => {
+      return (
+        item.arrivalCity == to &&
+        item.departureCity == from &&
+        convertDate(new Date(item.arrivalTime), startDate)
+      );
+    });
+    if (availableFlights.length != 0) {
+      range.parentElement.parentElement.style.display = "block";
+      range.min = Math.min(...availableFlights.map((o) => o.price));
+      range.max = Math.max(...availableFlights.map((o) => o.price));
+    } else {
+      range.parentElement.parentElement.style.display = "none";
+    }
+    if (selectedAirLines.length != 0) {
+      const res = [];
+      availableFlights.forEach((item) => {
+        selectedAirLines.forEach((data) => {
+          if (data == item.airline) res.push(item);
+        });
+      });
+      availableFlights = res;
+    }
+
+    if (price) {
+      availableFlights = availableFlights.filter((item) => item.price <= price);
+    }
+    fliterWrapper.innerHTML = "";
+    if (availableFlights.length != 0) {
       fliterWrapper.innerHTML = availableFlights
         .map(
           ({
@@ -77,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <h1 class="font-semibold text-xl">
                          ${airline} <span class="text-gray-500 text-lg"> (${flightNumber})</span>
                         </h1>
-                        <p>${price}</p>
+                        <p class="font-semibold">&#8377;${price}</p>
                       </div>
                     </div>
                     <div class="flex justify-between items-center">
@@ -113,10 +144,67 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         )
         .join("");
+    } else {
+      sendNotification("info", "Flights not found, for your selected choice!!");
     }
+
+    document.querySelectorAll(".book-now-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        flightId = button.value;
+        const { seatsAvailable } = flights.find((item) => item.id == flightId);
+        const loginUser = getLogedInUser();
+        const history = loginUser.history;
+
+        let dateToBeBook = new Date(startDate);
+        let isBooked = false;
+        history.forEach(
+          ({ time, flightData, totalAdults: ta, totalAdults: tc }) => {
+            const date = new Date(time);
+
+            if (
+              dateToBeBook.getFullYear() === date.getFullYear() &&
+              dateToBeBook.getDay() === date.getDay() &&
+              dateToBeBook.getMonth() === date.getMonth() &&
+              flightId == flightData.id &&
+              totalAdults + TotalChilds == ta + tc
+            ) {
+              isBooked = true;
+            }
+          }
+        );
+        if (seatsAvailable < totalTravelers) {
+          sendNotification(
+            "error",
+            `Total passengers are more than available seats!!!`
+          );
+        } else if (isBooked) {
+          sendNotification("error", "You can't book same flight on same day!!");
+        } else {
+          if (isLogedIn()) {
+            let user = JSON.parse(localStorage.getItem("currentUser"));
+            loadBookingPopUp(flightId, user);
+          } else {
+            loadPhoneNUmberPopUp(loadBookingPopUp, flightId, true);
+          }
+        }
+      });
+    });
   };
+  document.querySelectorAll(".airlines").forEach((item) => {
+    item.addEventListener("change", () => {
+      if (item.checked) selectedAirLines = [...selectedAirLines, item.value];
+      else
+        selectedAirLines = selectedAirLines.filter(
+          (data) => data != item.value
+        );
+      makeCards();
+    });
+  });
   makeCards();
   const loadBookingPopUp = (id, user) => {
+    let params = new URLSearchParams(location.search);
+    let totalAdults = params.get("adults");
+    let TotalChilds = params.get("childs");
     const flightData = flights.find((item) => item.id == id);
     const {
       airline,
@@ -179,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   ${airline}
                   <span class="text-gray-500 text-lg"> (${flightNumber})</span>
                 </h1>
-                <p>${price}</p>
+                <p>&#8377;${price}</p>
               </div>
             </div>
             <div class="flex justify-between items-center">
@@ -253,18 +341,138 @@ document.addEventListener("DOMContentLoaded", () => {
       .querySelectorAll(".close-flight-popup")
       .forEach((item) => item.addEventListener("click", closeFlightPopup));
     document.getElementById("book-btn").onclick = () => {
-      console.log("totalSeats: ", totalSeats);
-      console.log("seatsAvailable: ", seatsAvailable);
-      let users = getListOfUsers();
-      const user = JSON.parse(localStorage.getItem("currentUser"));
       const bookingData = {
         flightData,
         user,
-        totalAdults,
-        TotalChilds,
+        totalAdults: totalAdults != 0 && totalAdults != "" ? totalAdults : 1,
+        TotalChilds: TotalChilds != 0 && TotalChilds != "" ? TotalChilds : 0,
         total,
         time: Date(),
       };
+      closeFlightPopup();
+      checkOut(bookingData);
+    };
+    openFlightPopup();
+  };
+
+  const tooltip = document.getElementById("tooltip"),
+    setValue = () => {
+      const newValue = Number(
+          ((range.value - range.min) * 100) / (range.max - range.min)
+        ),
+        newPosition = 16 - newValue * 0.32;
+      price = range.value;
+      tooltip.innerHTML = `<span>${range.value}</span>`;
+      tooltip.style.left = `calc(${newValue}% + (${newPosition}px))`;
+      document.documentElement.style.setProperty(
+        "--range-progress",
+        `calc(${newValue}% + (${newPosition}px))`
+      );
+    };
+  range.value = range.max;
+  setValue();
+  range.addEventListener("input", () => {
+    setValue();
+    makeCards();
+  });
+  // const phone = document.getElementById("phone");
+  // const userName = document.getElementById("user-name");
+
+  const from = document.getElementById("from");
+  const to = document.getElementById("to");
+  const startDate = document.getElementById("depart");
+
+  const fromError = document.getElementById("from-error");
+  const torror = document.getElementById("to-error");
+  const departError = document.getElementById("depart-error");
+  const adults = document.getElementById("adults");
+  // const adultsError = document.getElementById("adult-error");
+  const child = document.getElementById("child");
+  // const childError = document.getElementById("child-error");
+  let flightId = 1;
+
+  document.getElementById("flight-search-btn").onclick = () => {
+    if (from.value.trim() == "") {
+      fromError.textContent = "This field is required!!";
+    } else if (to.value.trim() == "") {
+      torror.textContent = "This field is required!!";
+    } else if (startDate.value == "") {
+      departError.innerText = "This field is required!!";
+    } else {
+      history.replaceState(
+        {},
+        "",
+        `?from=${from.value}&to=${to.value}&depart=${startDate.value}&adults=${adults.value}&childs=${child.value}`
+      );
+      makeCards();
+    }
+  };
+
+  /* YOU DONT NEED THESE, these are just for the popup you see */
+
+  function closeFlightPopup() {
+    document.querySelector(".flight-popup").classList.add("hidden");
+  }
+  function openFlightPopup() {
+    document.querySelector(".flight-popup").classList.remove("hidden");
+  }
+  const checkOut = (bookingData) => {
+    modal.innerHTML = `
+    <div class="bg-white max-w-lg w-full rounded-md">
+        <div
+          class="p-3 flex items-center justify-between border-b border-b-gray-300"
+        >
+          <h3 class="font-semibold text-xl">Make Payment</h3>
+          <span class="modal-close cursor-pointer text-3xl">×</span>
+        </div>
+        <div class="p-3 border-b border-b-gray-300">
+          <div class="flex items-center justify-between">
+            <span>Name</span>
+            <span>${bookingData.user.username}</span>
+          </div>
+          <div
+            class="flex items-center justify-between border-b border-b-gray-300 pb-2"
+          >
+            <span>Phone</span>
+            <span>${bookingData.user.phone}</span>
+          </div>
+          <div class="flex items-center font-semibold justify-between pt-2">
+            <span>Total</span>
+            <span>$${bookingData.total.toFixed(2)}</span>
+          </div>
+        </div>
+        <div class="p-3 flex items-center justify-start">
+          <div>
+            <button
+              id="checkout"
+              class="text-sm text-white bg-[#09203C] rounded-md px-4 py-2"
+            >
+              Make payment
+            </button>
+            <button
+              class="modal-close text-sm text-gray-500 border rounded-md px-4 py-2"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    // Open modal
+    modal.style.display = "flex"; // Show modal
+    x.style.overflow = "hidden"; //Disable scroll on body
+
+    // Select and trigger all close buttons
+    for (var i = 0; i < modalClose.length; i++) {
+      modalClose[i].addEventListener("click", function () {
+        modal.style.display = "none"; // Hide modal
+        x.style.overflow = "auto"; // Active scroll on body
+      });
+    }
+    document.getElementById("checkout").addEventListener("click", () => {
+      let users = getListOfUsers();
+      const user = JSON.parse(localStorage.getItem("currentUser"));
+
       const usersData = users.find((item) => item.phone == user.phone);
       if (usersData.history) {
         usersData.history = [...usersData.history, bookingData];
@@ -281,67 +489,13 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("users", JSON.stringify(users));
       sendNotification("success", "You flight booked successfully!!");
       location = "/src/history.html";
-    };
-    openFlightPopup();
-  };
-  // const phone = document.getElementById("phone");
-  // const userName = document.getElementById("user-name");
-
-  const from = document.getElementById("from");
-  const to = document.getElementById("to");
-  const startDate = document.getElementById("depart");
-  const returnDate = document.getElementById("return");
-  const fromError = document.getElementById("from-error");
-  const torror = document.getElementById("to-error");
-  const departError = document.getElementById("depart-error");
-  const adults = document.getElementById("adults");
-  // const adultsError = document.getElementById("adult-error");
-  const child = document.getElementById("child");
-  // const childError = document.getElementById("child-error");
-  let flightId = 1;
-
-  document.querySelectorAll(".book-now-btn").forEach((button) => {
-    button.addEventListener("click", () => {
-      flightId = button.value;
-      const { seatsAvailable } = flights.find((item) => item.id == flightId);
-      if (seatsAvailable < totalTravelers) {
-        sendNotification(
-          "error",
-          `Total passengers are more than available seats!!!`
-        );
-      } else {
-        if (isLogedIn()) {
-          let user = JSON.parse(localStorage.getItem("currentUser"));
-          loadBookingPopUp(flightId, user);
-        } else {
-          loadPhoneNUmberPopUp(loadBookingPopUp, flightId, true);
-        }
-      }
     });
-  });
-  document.getElementById("flight-search-btn").onclick = () => {
-    if (from.value.trim() == "") {
-      fromError.textContent = "Hey,From where you want to go!!!";
-    } else if (to.value.trim() == "") {
-      torror.textContent = "Hey, Where you want to go!!!";
-    } else if (startDate.value == "") {
-      departError.innerText = "When you want to go!!!";
-    } else {
-      history.replaceState(
-        {},
-        "",
-        `?from=${from.value}&to=${to.value}&depart=${startDate.value}&return=${returnDate.value}&adults=${adults.value}&childs=${child.value}`
-      );
-      makeCards();
-    }
+    // Close modal when click away from modal
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none"; // Hide modal
+        x.style.overflow = "auto"; // Active scroll on body
+      }
+    };
   };
-
-  /* YOU DONT NEED THESE, these are just for the popup you see */
-
-  function closeFlightPopup() {
-    document.querySelector(".flight-popup").classList.add("hidden");
-  }
-  function openFlightPopup() {
-    document.querySelector(".flight-popup").classList.remove("hidden");
-  }
 });

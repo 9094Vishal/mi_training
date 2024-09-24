@@ -15,7 +15,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .selected,
 [role="option"]:hover {
-  background: #fff;
+  background: #eee;
   color: #000;
   border-color: #fff;
   cursor: pointer;
@@ -43,4 +43,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-color: #fff;
   color: #000;
   border-top: 0;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
 }

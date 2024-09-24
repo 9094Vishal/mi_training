@@ -1,5 +1,20 @@
 import { cities } from "../mock/cityes.js";
 
+const KEYS = {
+  leftKey: 37,
+  rightKey: 39,
+  backspace: 8,
+  deleteKey: 46,
+  enter: 13,
+};
+export const convertDate = (str, d) => {
+  var start = new Date(d);
+  var date = new Date(str);
+
+  if (start <= date) {
+    return true;
+  }
+};
 export const getTime = (d) => {
   const date = new Date(d);
 
@@ -27,19 +42,38 @@ export const loadNavBar = () => {
   header.setAttribute("class", "px-14 py-2 bg-[#09203C] text-white");
   const mainHeader = getNavigationBar();
   header.innerHTML = mainHeader;
+  if (!isLogedIn) {
+    document.getElementById("login-btn").addEventListener("click", () => {
+      openLoginPopUp();
+    });
+    document.getElementById("signup-btn").addEventListener("click", () => {
+      loadPhoneNUmberPopUp();
+    });
+  } else
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("isLogIn");
+      localStorage.removeItem("currentUser");
+      window.location.reload();
+    });
 };
 export const getListeners = () => {
   if (!isLogedIn()) {
-    return [
-      document.getElementById("login-btn"),
-      document.getElementById("signup-btn"),
-    ];
-  }
-  return [document.getElementById("logout")];
+    document.getElementById("login-btn").addEventListener("click", () => {
+      openLoginPopUp();
+    });
+    document.getElementById("signup-btn").addEventListener("click", () => {
+      loadPhoneNUmberPopUp();
+    });
+  } else
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("isLogIn");
+      localStorage.removeItem("currentUser");
+      window.location.reload();
+    });
 };
 export const loadHeaderWithBookFunctions = () => {
   const header = document.querySelector("header");
-  header.setAttribute("class", "px-14 py-10 bg-[#09203C] text-white");
+  header.setAttribute("class", "px-14 py-3 bg-[#09203C] text-white");
   const mainHeader = getNavigationBar() + getBookFunctions();
   header.innerHTML = mainHeader;
   const btn = document.querySelector("button.mobile-menu-button");
@@ -47,6 +81,19 @@ export const loadHeaderWithBookFunctions = () => {
   btn.addEventListener("click", () => {
     menu.classList.toggle("hidden");
   });
+  if (!isLogedIn()) {
+    document.getElementById("login-btn").addEventListener("click", () => {
+      openLoginPopUp();
+    });
+    document.getElementById("signup-btn").addEventListener("click", () => {
+      loadPhoneNUmberPopUp();
+    });
+  } else
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("isLogIn");
+      localStorage.removeItem("currentUser");
+      window.location.reload();
+    });
   document.querySelectorAll(".clear-btn").forEach((item) => {
     item.onclick = () => {
       if (item.id == "source") {
@@ -55,6 +102,10 @@ export const loadHeaderWithBookFunctions = () => {
         to.value = " ";
       }
     };
+  });
+  document.querySelectorAll("input[type='date']").forEach((date) => {
+    date.setAttribute("min", new Date().toISOString().split("T")[0]);
+    date.setAttribute("value", new Date().toISOString().split("T")[0]);
   });
   document.querySelectorAll("[data-suggest]").forEach((input) => {
     input.addEventListener("input", function () {
@@ -162,7 +213,7 @@ export const getNavigationBar = () => {
               <!-- logo -->
               <div>
                 <a
-                  href="#"
+                  href="/src"
                   class="flex items-center py-5 px-2 hover:text-gray-200"
                 >
                   <svg
@@ -284,7 +335,7 @@ export const getBookFunctions = () => {
                           data-suggest
                           type="text"
                           name="from"
-                          value="${from ?? ""}"
+                          value="${from ?? "Delhi"}"
                           placeholder="Source"
                           autocomplete="off"
                           class="block border-none outline-none w-full flex-1 rounded-md py-1.5 text-gray-900 placeholder:text-gray-400 sm:text-sm"
@@ -321,7 +372,7 @@ export const getBookFunctions = () => {
                           type="text"
                           id="to"
                           name="to"
-                          value="${to ?? ""}"
+                          value="${to ?? "Goa"}"
                           data-suggest
                           placeholder="Destination"
                           autocomplete="off"
@@ -339,16 +390,16 @@ export const getBookFunctions = () => {
                 </div>
               </div>
             </div>
-            <div class="flex gap-2 relative">
-              <div class="bg-white px-5 py-1">
-                <div>
+            <div class="flex gap-2 relative flex-1">
+              <div class="bg-white px-5 py-1 w-full">
+                <div class="w-full">
                   <label
                     for="depart"
                     class="block text-sm font-medium leading-6 text-slate-500"
                     >Depart</label
                   >
                   <div
-                    class="mt-2 rounded-md shadow-sm flex items-center bg-white pr-2"
+                    class="mt-2 rounded-md shadow-sm flex items-center bg-white pr-2 w-full"
                   >
                     <input
                       type="date"
@@ -364,32 +415,8 @@ export const getBookFunctions = () => {
               </div>
             </div>
 
-            <div class="relative">
-              <div class="bg-white px-5 py-1">
-                <div>
-                  <label
-                    for="return"
-                    class="block text-sm font-medium leading-6 text-slate-500"
-                    >Return</label
-                  >
-                  <div
-                    class="mt-2 rounded-md shadow-sm flex items-center bg-white pr-2"
-                  >
-                    <input
-                      type="date"
-                      name="return"
-                      value="${returnDate ?? ""}"
-                      id="return"
-                      class="block border-none outline-none w-full rounded-md py-1.5 pr-20 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                      placeholder="Destination"
-                    />
-                  </div>
-                  <p class="text-red-500"></p>
-                </div>
-              </div>
-            </div>
-            <div class="flex gap-2 relative">
-              <div class="bg-white px-5 py-1">
+            <div class="flex gap-2 relative flex-1">
+              <div class="bg-white px-5 py-1 w-full">
                 <div>
                   <label
                     for="adults"
@@ -402,12 +429,12 @@ export const getBookFunctions = () => {
                     <input
                       type="number"
                       name="adults"
-                      value="${adults ?? 0}"
+                      value="${adults ?? 1}"
                       id="adults"
                       class="block border-none outline-none w-full rounded-md py-1.5 pr-20 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                       placeholder="Number of Adutls"
                       value="0"
-                      min="0"
+                      min="1"
                       max="9"
                     />
                   </div>
@@ -415,8 +442,8 @@ export const getBookFunctions = () => {
                 </div>
               </div>
             </div>
-            <div class="flex gap-2 relative">
-              <div class="bg-white px-5 py-1">
+            <div class="flex gap-2 relative flex-1">
+              <div class="bg-white px-5 py-1 w-full">
                 <div>
                   <label
                     for="child"
@@ -510,7 +537,8 @@ export const loadOtpPop = (
               <input
                 id="otp"
                 name="otp"
-                type="otp"
+                maxlength="6"
+                type="number"
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
               />
             </div>
@@ -538,11 +566,26 @@ export const loadOtpPop = (
   `;
   const otpInput = document.getElementById("otp");
   const otpError = document.getElementById("otp-error");
+  otpInput.addEventListener("keydown", (e) => {
+    if (
+      e.keyCode === KEYS.backspace ||
+      e.keyCode === KEYS.deleteKey ||
+      e.keyCode === KEYS.rightKey ||
+      e.keyCode === KEYS.leftKey ||
+      e.keyCode === KEYS.enter
+    ) {
+      return true;
+    }
+    if (e.target.value.length === e.target.maxLength) {
+      e.stopPropagation();
+      e.preventDefault();
+      return false;
+    }
+    return true;
+  });
   document.getElementById("otp-form").addEventListener("submit", (e) => {
     e.preventDefault();
     if (validateNumber(otpInput.value.toString(), otpError, 6)) {
-      console.log(otp);
-
       if (otpInput.value.toString() == otp) {
         const users = getListOfUsers();
         if (isCallBackNeeded) {
@@ -550,9 +593,10 @@ export const loadOtpPop = (
             username: userName.value,
             phone: phone.value,
           };
+          users.push(data);
           localStorage.setItem("currentUser", JSON.stringify(data));
-          localStorage.setItem("users", JSON.stringify(data));
-          // localStorage.setItem("isLogIn", true);
+          localStorage.setItem("users", JSON.stringify(users));
+          localStorage.setItem("isLogIn", true);
           callBack(id, data);
           document.querySelector(".flight-popup").classList.remove("hidden");
         } else if (islogin) {
@@ -587,7 +631,7 @@ export const loadOtpPop = (
   document
     .querySelector(".close-otp-popup")
     .addEventListener("click", closeOtpPopup);
-  otpInput.addEventListener("input", () => {
+  otpInput.addEventListener("change", () => {
     validateNumber(otpInput.value.toString(), otpError, 6);
   });
   document.querySelector(".otp-popup").classList.remove("hidden");
@@ -630,7 +674,7 @@ export const loadPhoneNUmberPopUp = (cb, id, needCb = false) => {
             <label
               for="user-name"
               class="block text-sm font-medium leading-6 text-gray-900"
-              >user Name</label
+              >User name</label
             >
             <div class="mt-2">
               <input
@@ -652,7 +696,8 @@ export const loadPhoneNUmberPopUp = (cb, id, needCb = false) => {
             <div class="mt-2">
               <input
                 id="phone"
-                name="phone"
+                name="number"
+                maxlength="10"
                 type="number"
                 class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -680,6 +725,23 @@ export const loadPhoneNUmberPopUp = (cb, id, needCb = false) => {
   const nameError = document.getElementById("name-error");
   const phoneError = document.getElementById("phone-error");
   const signup = document.querySelector(".login");
+  phone.addEventListener("keydown", (e) => {
+    if (
+      e.keyCode === KEYS.backspace ||
+      e.keyCode === KEYS.deleteKey ||
+      e.keyCode === KEYS.rightKey ||
+      e.keyCode === KEYS.leftKey ||
+      e.keyCode === KEYS.enter
+    ) {
+      return true;
+    }
+    if (e.target.value.length === e.target.maxLength) {
+      e.stopPropagation();
+      e.preventDefault();
+      return false;
+    }
+    return true;
+  });
   phone.addEventListener("input", () => {
     validateNumber(phone.value.toString(), phoneError, 10);
   });
@@ -696,7 +758,8 @@ export const loadPhoneNUmberPopUp = (cb, id, needCb = false) => {
       const user = users.find((item) => item.phone == phone.value);
 
       if (user) {
-        phoneError.innerHTML = "Your phone number is not exist";
+        phoneError.innerHTML =
+          "Your phone number is already exist, Please login";
         signup.classList.remove("hidden");
       } else {
         closeTreactPopup();
@@ -763,6 +826,7 @@ export const openLoginPopUp = () => {
               <input
                 id="phone-number"
                 name="phone"
+                maxlength="10"
                 type="number"
                 class="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -788,11 +852,27 @@ export const openLoginPopUp = () => {
   const signup = document.querySelector(".signup");
   const number = document.getElementById("phone-number");
   const numberError = document.getElementById("phone-number-error");
+  number.addEventListener("keydown", (e) => {
+    if (
+      e.keyCode === KEYS.backspace ||
+      e.keyCode === KEYS.deleteKey ||
+      e.keyCode === KEYS.rightKey ||
+      e.keyCode === KEYS.leftKey ||
+      e.keyCode === KEYS.enter
+    ) {
+      return true;
+    }
+    if (e.target.value.length === e.target.maxLength) {
+      e.stopPropagation();
+      e.preventDefault();
+      return false;
+    }
+    return true;
+  });
   document.getElementById("user-login-form").addEventListener("submit", (e) => {
     e.preventDefault();
     if (validateNumber(number.value.toString(), numberError, 10)) {
       const users = getListOfUsers();
-      console.log("users: ", users, number.value);
       const user = users.find((item) => item.phone == number.value);
 
       if (user) {
@@ -826,7 +906,7 @@ export const validateNumber = (number, error, digits) => {
   }
   if (number.length >= 0 && number.length < digits) {
     error.innerHTML = `${
-      number == 10 ? "Number" : "Otp"
+      digits == 10 ? "Number" : "Otp"
     } must be ${digits} digits`;
     return false;
   } else {
@@ -837,7 +917,6 @@ export const validateNumber = (number, error, digits) => {
 export const sendOtp = () => {
   const userOtp = Math.floor(100000 + Math.random() * 900000);
 
-  console.log("otp: ", userOtp);
   return userOtp;
 };
 export const getListOfUsers = () => {

@@ -1,14 +1,14 @@
 import { cities } from "../mock/cityes.js";
-import { loadHeaderWithBookFunctions } from "./helper.js";
+import { getListeners, loadHeaderWithBookFunctions } from "./helper.js";
 
 // grab everything we need
 
 document.addEventListener("DOMContentLoaded", () => {
   loadHeaderWithBookFunctions();
+  // getListeners();
   const from = document.getElementById("from");
   const to = document.getElementById("to");
   const startDate = document.getElementById("depart");
-  const returnDate = document.getElementById("return");
   const fromError = document.getElementById("from-error");
   const torror = document.getElementById("to-error");
   const departError = document.getElementById("depart-error");
@@ -19,18 +19,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const childError = document.getElementById("child-error");
   document.getElementById("flight-search-btn").onclick = () => {
     if (from.value.trim() == "") {
-      fromError.textContent = "Hey,From where you want to go!!!";
+      fromError.textContent = "This field is required!!";
     } else if (to.value.trim() == "") {
-      torror.textContent = "Hey, Where you want to go!!!";
+      torror.textContent = "This field is required!!";
     } else if (startDate.value == "") {
-      departError.innerText = "When you want to go!!!";
+      departError.innerText = "This field is required!!";
     } else {
-      location = `trip.html?from=${from.value}&to=${to.value}&depart=${startDate.value}&return=${returnDate.value}&adults=${adults.value}&childs=${child.value}`;
+      location = `trip.html?from=${from.value}&to=${to.value}&depart=${startDate.value}&adults=${adults.value}&childs=${child.value}`;
     }
   };
   from.addEventListener("input", (e) => {
     if (e.target.value.trim() == "") {
-      fromError.textContent = "Hey, Where you want to go!!!";
+      fromError.textContent = "This field is required!!";
     } else {
       fromError.textContent = "";
     }
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   to.addEventListener("input", (e) => {
     if (e.target.value.trim() == "") {
-      torror.textContent = "Hey, Where you want to go!!!";
+      torror.textContent = "This field is required!!";
     } else {
       torror.textContent = "";
     }
